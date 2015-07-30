@@ -29,11 +29,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     // MARK: - Handle "Edit" UIBarButtonItem actions
     
     func editButtonPressed() {
-        if self.navigationItem.rightBarButtonItem?.title == "Edit" {
-            edit()
-        } else {
-            done()
-        }
+        self.navigationItem.rightBarButtonItem?.title == "Edit" ? edit() : done()
     }
 
     func edit() {
