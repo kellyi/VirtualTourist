@@ -26,24 +26,26 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         tapPinsNotificationView.hidden = true
     }
     
+    // MARK: - Handle "Edit" UIBarButtonItem actions
+    
     func editButtonPressed() {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
-            self.navigationItem.rightBarButtonItem?.title = "Done"
             edit()
         } else {
-            self.navigationItem.rightBarButtonItem?.title = "Edit"
             done()
         }
     }
 
     func edit() {
+        self.navigationItem.rightBarButtonItem?.title = "Done"
         tapPinsNotificationView.hidden = false
-        println("edit")
+        mapView.frame.origin.y -= tapPinsNotificationView.frame.height
     }
     
     func done() {
+        self.navigationItem.rightBarButtonItem?.title = "Edit"
         tapPinsNotificationView.hidden = true
-        println("done")
+        mapView.frame.origin.y += tapPinsNotificationView.frame.height
     }
 }
 
