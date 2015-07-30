@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="1qi-Iv-14I">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -23,33 +24,81 @@
                                     <outlet property="delegate" destination="vXZ-lx-hvc" id="cPW-eC-QPr"/>
                                 </connections>
                             </mapView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EmA-mw-GQ5">
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap Pins to Delete" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EgZ-Ne-EyK">
+                                        <rect key="frame" x="0.0" y="-21" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                        <color key="textColor" name="controlBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="1" green="0.50196081399917603" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="centerX" secondItem="EgZ-Ne-EyK" secondAttribute="centerX" constant="-0.5" id="E7B-hC-vaa"/>
+                                    <constraint firstAttribute="centerY" secondItem="EgZ-Ne-EyK" secondAttribute="centerY" id="wbl-u4-Omh"/>
+                                    <constraint firstAttribute="height" constant="65" id="wkc-g6-d4R"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="subviews">
+                                        <exclude reference="EgZ-Ne-EyK"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <exclude reference="wkc-g6-d4R"/>
+                                        <exclude reference="E7B-hC-vaa"/>
+                                        <exclude reference="wbl-u4-Omh"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="subviews">
+                                        <include reference="EgZ-Ne-EyK"/>
+                                    </mask>
+                                    <mask key="constraints">
+                                        <include reference="wkc-g6-d4R"/>
+                                        <include reference="E7B-hC-vaa"/>
+                                        <include reference="wbl-u4-Omh"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="EmA-mw-GQ5" secondAttribute="bottom" id="EQi-GU-HIJ"/>
                             <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="yVm-d8-zhk" secondAttribute="bottom" id="FrX-YV-yac"/>
                             <constraint firstItem="yVm-d8-zhk" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="Rn2-pf-sQw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="yVm-d8-zhk" secondAttribute="trailing" constant="-16" id="WdA-DF-y47"/>
+                            <constraint firstItem="EmA-mw-GQ5" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leadingMargin" constant="-16" id="lwH-XR-3cH"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="EmA-mw-GQ5" secondAttribute="trailing" constant="-16" id="tgV-Pq-0u1"/>
                             <constraint firstItem="yVm-d8-zhk" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="topMargin" id="txq-Lr-Rg2"/>
                         </constraints>
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="yVm-d8-zhk"/>
+                                <exclude reference="EmA-mw-GQ5"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="Rn2-pf-sQw"/>
                                 <exclude reference="WdA-DF-y47"/>
                                 <exclude reference="txq-Lr-Rg2"/>
+                                <exclude reference="lwH-XR-3cH"/>
+                                <exclude reference="tgV-Pq-0u1"/>
+                                <exclude reference="EQi-GU-HIJ"/>
                                 <exclude reference="FrX-YV-yac"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="yVm-d8-zhk"/>
+                                <include reference="EmA-mw-GQ5"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="Rn2-pf-sQw"/>
                                 <include reference="WdA-DF-y47"/>
                                 <include reference="txq-Lr-Rg2"/>
+                                <include reference="lwH-XR-3cH"/>
+                                <include reference="tgV-Pq-0u1"/>
+                                <include reference="EQi-GU-HIJ"/>
                                 <include reference="FrX-YV-yac"/>
                             </mask>
                         </variation>
@@ -57,6 +106,7 @@
                     <navigationItem key="navigationItem" id="nLj-2P-4dA"/>
                     <connections>
                         <outlet property="mapView" destination="yVm-d8-zhk" id="s6k-Fg-JmG"/>
+                        <outlet property="tapPinsNotificationView" destination="EmA-mw-GQ5" id="a5t-WC-ntO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>
