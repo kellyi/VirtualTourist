@@ -24,6 +24,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         self.title = "VirtualTourist"
         tapPinsNotificationView.backgroundColor = UIColor.redColor()
         tapPinsNotificationView.hidden = true
+        
+        var longPressGR = UILongPressGestureRecognizer(target: self, action: "annotate:")
+        longPressGR.minimumPressDuration = 0.5
+        mapView.addGestureRecognizer(longPressGR)
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
@@ -43,5 +47,27 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         tapPinsNotificationView.hidden = true
         mapView.frame.origin.y += tapPinsNotificationView.frame.height
     }
+    
+    // MARK: - Add and Remove Annotations
+    
+    func annotate(gestureRecognizer: UIGestureRecognizer) {
+        if self.navigationItem.rightBarButtonItem?.title == "Done" {
+            return
+        } else if gestureRecognizer.state == UIGestureRecognizerState.Began {
+            var touchPoint = gestureRecognizer.locationInView(mapView)
+            var newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = newCoordinates
+            mapView.addAnnotation(annotation)
+        }
+    }
+    
+    func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
+        if self.navigationItem.rightBarButtonItem?.title == "Edit" {
+            println("pin selected")
+            return
+        } else if let annotation = view.annotation as MKAnnotation! {
+            mapView.removeAnnotation(annotation)
+        }
+    }
 }
-
