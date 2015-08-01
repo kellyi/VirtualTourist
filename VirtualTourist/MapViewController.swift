@@ -70,4 +70,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             mapView.removeAnnotation(annotation)
         }
     }
+    
+    // MARK: - Animate Annotation Pin Drop
+    
+    func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
+        var pin = MKPinAnnotationView()
+        pin.annotation = annotation
+        pin.animatesDrop = true
+        return pin
+    }
 }
