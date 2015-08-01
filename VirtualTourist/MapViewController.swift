@@ -64,8 +64,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
-            println("pin selected")
-            return
+            let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
+            navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else if let annotation = view.annotation as MKAnnotation! {
             mapView.removeAnnotation(annotation)
         }
