@@ -95,10 +95,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func saveMapRegion() {
         
-        // Place the "center" and "span" of the map into a dictionary
-        // The "span" is the width and height of the map in degrees.
-        // It represents the zoom level of the map.
-        
         let dictionary = [
             "latitude" : mapView.region.center.latitude,
             "longitude" : mapView.region.center.longitude,
@@ -106,29 +102,23 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             "longitudeDelta" : mapView.region.span.longitudeDelta
         ]
         
-        // Archive the dictionary into the filePath
         NSKeyedArchiver.archiveRootObject(dictionary, toFile: filePath)
     }
     
     func restoreMapRegion(animated: Bool) {
         
-        // if we can unarchive a dictionary, we will use it to set the map back to its
-        // previous center and span
         if let regionDictionary = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String : AnyObject] {
             
             let longitude = regionDictionary["longitude"] as! CLLocationDegrees
             let latitude = regionDictionary["latitude"] as! CLLocationDegrees
             let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
-            
             let longitudeDelta = regionDictionary["latitudeDelta"] as! CLLocationDegrees
             let latitudeDelta = regionDictionary["longitudeDelta"] as! CLLocationDegrees
             let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
-            
             let savedRegion = MKCoordinateRegion(center: center, span: span)
             
-            println("lat: \(latitude), lon: \(longitude), latD: \(latitudeDelta), lonD: \(longitudeDelta)")
-            
             mapView.setRegion(savedRegion, animated: animated)
+            mapView.setCenterCoordinate(center, animated: animated)
         }
     }
 }
