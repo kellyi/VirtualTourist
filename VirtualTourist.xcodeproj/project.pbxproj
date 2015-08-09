@@ -15,8 +15,8 @@
 		DF1F177D1B690508005C8EE7 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = DF1F177B1B690508005C8EE7 /* LaunchScreen.xib */; };
 		DF1F17891B690508005C8EE7 /* VirtualTouristTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF1F17881B690508005C8EE7 /* VirtualTouristTests.swift */; };
 		DF2A9F461B6CF2FB00F2423B /* ImageCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */; };
-		DFADDB6B1B77DC3200395A5E /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB6A1B77DC3200395A5E /* FlickrConstants.swift */; };
 		DFADDB6D1B77DC6C00395A5E /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB6C1B77DC6C00395A5E /* FlickrClient.swift */; };
+		DFADDB6F1B77E08E00395A5E /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB6E1B77E08E00395A5E /* FlickrConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,8 +42,8 @@
 		DF1F17871B690508005C8EE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DF1F17881B690508005C8EE7 /* VirtualTouristTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VirtualTouristTests.swift; sourceTree = "<group>"; };
 		DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewController.swift; sourceTree = "<group>"; };
-		DFADDB6A1B77DC3200395A5E /* FlickrConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 		DFADDB6C1B77DC6C00395A5E /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
+		DFADDB6E1B77E08E00395A5E /* FlickrConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,7 +126,7 @@
 		DFADDB691B77DBDD00395A5E /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				DFADDB6A1B77DC3200395A5E /* FlickrConstants.swift */,
+				DFADDB6E1B77E08E00395A5E /* FlickrConstants.swift */,
 				DFADDB6C1B77DC6C00395A5E /* FlickrClient.swift */,
 			);
 			name = Models;
@@ -234,9 +234,9 @@
 			files = (
 				DF2A9F461B6CF2FB00F2423B /* ImageCollectionViewController.swift in Sources */,
 				DF1F17751B690508005C8EE7 /* MapViewController.swift in Sources */,
-				DFADDB6B1B77DC3200395A5E /* FlickrConstants.swift in Sources */,
 				DF1F17731B690508005C8EE7 /* VirtualTourist.xcdatamodeld in Sources */,
 				DF1F17701B690508005C8EE7 /* AppDelegate.swift in Sources */,
+				DFADDB6F1B77E08E00395A5E /* FlickrConstants.swift in Sources */,
 				DFADDB6D1B77DC6C00395A5E /* FlickrClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
