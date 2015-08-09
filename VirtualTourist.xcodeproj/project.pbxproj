@@ -89,16 +89,14 @@
 		DF1F176C1B690508005C8EE7 /* VirtualTourist */ = {
 			isa = PBXGroup;
 			children = (
+				DFADDB741B77F5E600395A5E /* ViewControllers */,
 				DFADDB691B77DBDD00395A5E /* Models */,
 				DF1F176F1B690508005C8EE7 /* AppDelegate.swift */,
-				DF1F17741B690508005C8EE7 /* MapViewController.swift */,
 				DF1F17761B690508005C8EE7 /* Main.storyboard */,
 				DF1F17791B690508005C8EE7 /* Images.xcassets */,
 				DF1F177B1B690508005C8EE7 /* LaunchScreen.xib */,
 				DF1F17711B690508005C8EE7 /* VirtualTourist.xcdatamodeld */,
 				DF1F176D1B690508005C8EE7 /* Supporting Files */,
-				DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */,
-				DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
@@ -136,6 +134,16 @@
 				DFADDB701B77E62000395A5E /* FlickrImage.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		DFADDB741B77F5E600395A5E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */,
+				DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */,
+				DF1F17741B690508005C8EE7 /* MapViewController.swift */,
+			);
+			name = ViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

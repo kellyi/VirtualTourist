@@ -21,7 +21,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationItem.leftBarButtonItem?.title = "Hello World"
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

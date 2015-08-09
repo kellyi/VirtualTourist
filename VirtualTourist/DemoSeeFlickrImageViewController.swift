@@ -12,4 +12,9 @@ class DemoSeeFlickrImageViewController: UIViewController {
 
     @IBOutlet weak var imageView: UIImageView!
 
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: nil, action: nil)
+    }
+    
 }
