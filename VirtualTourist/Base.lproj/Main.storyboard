@@ -122,6 +122,7 @@
                         <viewControllerLayoutGuide type="bottom" id="e9v-Lj-c5s"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="bNM-JK-PeJ">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Bkr-WL-zTG">
@@ -238,16 +239,16 @@
                                 <exclude reference="dmd-VF-Tzv"/>
                             </mask>
                             <mask key="constraints">
+                                <exclude reference="sYo-jf-zVk"/>
                                 <exclude reference="8nT-Z2-teb"/>
                                 <exclude reference="dCK-VP-XzX"/>
                                 <exclude reference="dJ7-Ps-LTU"/>
-                                <exclude reference="Boo-Eb-JkF"/>
-                                <exclude reference="Ku4-5S-1p7"/>
-                                <exclude reference="Ydj-CK-0bn"/>
                                 <exclude reference="Fzy-Mb-k0o"/>
                                 <exclude reference="YOY-e9-zEf"/>
                                 <exclude reference="z6H-2v-N6Q"/>
-                                <exclude reference="sYo-jf-zVk"/>
+                                <exclude reference="Boo-Eb-JkF"/>
+                                <exclude reference="Ku4-5S-1p7"/>
+                                <exclude reference="Ydj-CK-0bn"/>
                             </mask>
                         </variation>
                         <variation key="widthClass=compact">
@@ -257,16 +258,16 @@
                                 <include reference="dmd-VF-Tzv"/>
                             </mask>
                             <mask key="constraints">
+                                <include reference="sYo-jf-zVk"/>
                                 <include reference="8nT-Z2-teb"/>
                                 <include reference="dCK-VP-XzX"/>
                                 <include reference="dJ7-Ps-LTU"/>
-                                <include reference="Boo-Eb-JkF"/>
-                                <include reference="Ku4-5S-1p7"/>
-                                <include reference="Ydj-CK-0bn"/>
                                 <include reference="Fzy-Mb-k0o"/>
                                 <include reference="YOY-e9-zEf"/>
                                 <include reference="z6H-2v-N6Q"/>
-                                <include reference="sYo-jf-zVk"/>
+                                <include reference="Boo-Eb-JkF"/>
+                                <include reference="Ku4-5S-1p7"/>
+                                <include reference="Ydj-CK-0bn"/>
                             </mask>
                         </variation>
                     </view>
@@ -279,6 +280,59 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cmd-EZ-HqD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2107.5" y="392"/>
+        </scene>
+        <!--Demo See Flickr Image View Controller-->
+        <scene sceneID="hJH-no-VTn">
+            <objects>
+                <viewController storyboardIdentifier="demoImageVC" id="c4I-e9-j0A" customClass="DemoSeeFlickrImageViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nba-iA-HGY"/>
+                        <viewControllerLayoutGuide type="bottom" id="g7h-4M-n2R"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="0Ij-vA-cCU">
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2HT-ST-8BN">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="2HT-ST-8BN" firstAttribute="leading" secondItem="0Ij-vA-cCU" secondAttribute="leadingMargin" constant="-16" id="D8C-Lm-CbD"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="2HT-ST-8BN" secondAttribute="trailing" constant="-16" id="Vq7-0C-riC"/>
+                            <constraint firstItem="2HT-ST-8BN" firstAttribute="top" secondItem="0Ij-vA-cCU" secondAttribute="topMargin" id="XQe-4R-wX1"/>
+                            <constraint firstItem="g7h-4M-n2R" firstAttribute="top" secondItem="2HT-ST-8BN" secondAttribute="bottom" id="w5Y-uN-oPg"/>
+                        </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="2HT-ST-8BN"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="D8C-Lm-CbD"/>
+                                <exclude reference="Vq7-0C-riC"/>
+                                <exclude reference="XQe-4R-wX1"/>
+                                <exclude reference="w5Y-uN-oPg"/>
+                            </mask>
+                        </variation>
+                        <variation key="widthClass=compact">
+                            <mask key="subviews">
+                                <include reference="2HT-ST-8BN"/>
+                            </mask>
+                            <mask key="constraints">
+                                <include reference="D8C-Lm-CbD"/>
+                                <include reference="Vq7-0C-riC"/>
+                                <include reference="XQe-4R-wX1"/>
+                                <include reference="w5Y-uN-oPg"/>
+                            </mask>
+                        </variation>
+                    </view>
+                    <connections>
+                        <outlet property="imageView" destination="2HT-ST-8BN" id="Pte-Uo-QLm"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xcJ-2z-80Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2106" y="1087"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wR7-WQ-ZY9">

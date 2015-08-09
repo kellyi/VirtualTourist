@@ -69,8 +69,12 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
+            /* disabling temporarily in order to use a demo imageViewController
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
             navigationController!.pushViewController(imageCollectionVC, animated: true)
+            */
+            let demoImageVC = self.storyboard!.instantiateViewControllerWithIdentifier("demoImageVC") as! DemoSeeFlickrImageViewController
+            navigationController!.pushViewController(demoImageVC, animated: true)
         } else if let annotation = view.annotation as MKAnnotation! {
             mapView.removeAnnotation(annotation)
         }
