@@ -10,7 +10,7 @@ import Foundation
 
 class FlickrClient : NSObject {
     
-    var flickrImages = [FlickrImage]()
+    var photos = [Photo]()
     
     let flickrAPIKey = FlickrClient.Constants.ApiKey
     let baseURL = FlickrClient.Constants.BaseURL

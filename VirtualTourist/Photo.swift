@@ -1,5 +1,5 @@
 //
-//  FlickrImage.swift
+//  Photo.swift
 //  VirtualTourist
 //
 //  Created by Kelly Innes on 8/9/15.
@@ -8,9 +8,6 @@
 
 import Foundation
 
-struct FlickrImage {
+class Photo {
     
-    init(initializerDictionary: [String: AnyObject]) {
-        
-    }
 }
