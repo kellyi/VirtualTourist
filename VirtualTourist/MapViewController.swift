@@ -19,7 +19,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Cancel", style: .Plain, target: nil, action: nil)
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
         restoreMapRegion(false)
     }
     
@@ -34,6 +34,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         var longPressGR = UILongPressGestureRecognizer(target: self, action: "annotate:")
         longPressGR.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longPressGR)
+        testFlickrClient()
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
@@ -124,6 +125,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             
             mapView.setRegion(savedRegion, animated: animated)
             mapView.setCenterCoordinate(center, animated: animated)
+        }
+    }
+    
+    func testFlickrClient() {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler() { (success, errorString) in
+            if success {
+                println("success")
+            } else {
+                println("error")
+            }
         }
     }
 }
