@@ -6,15 +6,29 @@
 //  Copyright (c) 2015 Kelly Innes. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import CoreData
 
-class Photo {
+@objc(Photo)
+
+class Photo : NSManagedObject {
     
     struct Keys {
-        
+        static let ID = "id"
+        // TODO: additional keys
     }
     
-    init(dictionary: [String : AnyObject]) {
+    @NSManaged var id: NSNumber
+    // TODO: additional var
+    
+    override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+    }
+    
+    init(dictionary: [String : AnyObject], context: NSManagedObjectContext) {
+        let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
         
+        // TODO: initialize variablies from dictionary
     }
 }
