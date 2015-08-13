@@ -10,4 +10,18 @@ import Foundation
 
 class Pin {
     
+    struct Keys {
+        static let Latitude = "latitude"
+        static let Longitude = "longitude"
+        static let Photos = "photos"
+    }
+    
+    var latitude: String
+    var longitude: String
+    var photos: [Photo] = [Photo]()
+    
+    init(dictionary: [String : AnyObject]) {
+        latitude = dictionary[Keys.Latitude] as! String
+        longitude = dictionary[Keys.Longitude] as! String
+    }
 }

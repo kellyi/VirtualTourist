@@ -20,6 +20,7 @@
 		DFADDB711B77E62000395A5E /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB701B77E62000395A5E /* Photo.swift */; };
 		DFADDB731B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */; };
 		DFADDB761B79544500395A5E /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB751B79544500395A5E /* Pin.swift */; };
+		DFADDB7A1B7C1FE500395A5E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		DFADDB701B77E62000395A5E /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoSeeFlickrImageViewController.swift; sourceTree = "<group>"; };
 		DFADDB751B79544500395A5E /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
+		DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,6 +101,7 @@
 				DF1F177B1B690508005C8EE7 /* LaunchScreen.xib */,
 				DF1F17711B690508005C8EE7 /* VirtualTourist.xcdatamodeld */,
 				DF1F176D1B690508005C8EE7 /* Supporting Files */,
+				DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */,
 			);
 			path = VirtualTourist;
 			sourceTree = "<group>";
@@ -252,6 +255,7 @@
 				DFADDB731B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift in Sources */,
 				DFADDB711B77E62000395A5E /* Photo.swift in Sources */,
 				DF2A9F461B6CF2FB00F2423B /* ImageCollectionViewController.swift in Sources */,
+				DFADDB7A1B7C1FE500395A5E /* CoreDataStackManager.swift in Sources */,
 				DFADDB761B79544500395A5E /* Pin.swift in Sources */,
 				DF1F17751B690508005C8EE7 /* MapViewController.swift in Sources */,
 				DF1F17731B690508005C8EE7 /* VirtualTourist.xcdatamodeld in Sources */,

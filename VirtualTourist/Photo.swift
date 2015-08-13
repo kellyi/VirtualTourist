@@ -10,4 +10,11 @@ import Foundation
 
 class Photo {
     
+    struct Keys {
+        
+    }
+    
+    init(dictionary: [String : AnyObject]) {
+        
+    }
 }
