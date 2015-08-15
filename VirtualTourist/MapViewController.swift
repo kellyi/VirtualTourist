@@ -50,7 +50,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func fetchAllPins() -> [Pin] {
         let error: NSErrorPointer = nil
-        let fetchRequest = NSFetchRequest(entityName: "Person")
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
         let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
         if error != nil {
             println("Error in fectchAllActors(): \(error)")
