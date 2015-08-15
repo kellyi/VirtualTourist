@@ -15,12 +15,13 @@ class Photo : NSManagedObject {
     
     struct Keys {
         static let ID = "id"
+        static let ImagePath = "image_path"
         // TODO: additional keys
     }
     
     @NSManaged var id: NSNumber
-    // TODO: additional var
     @NSManaged var pin: Pin?
+    @NSManaged var imagePath: String?
     
     lazy var sharedContext = {
         CoreDataStackManager.sharedInstance().managedObjectContext!

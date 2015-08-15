@@ -16,11 +16,13 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     @IBOutlet weak var tapPinsNotificationView: UIView!
     
+    var pins = [Pin]() // [Pin]!
+    
     // MARK: - Core Data Convenience. This will be useful for fetching. And for adding and saving objects as well.
     
-    var sharedContext: NSManagedObjectContext {
+    lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
-    }
+    }()
     
     // MARK: - Setup UIViews
     
@@ -29,6 +31,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
         println(sharedContext)
         restoreMapRegion(false)
+        //pins = fetchAllPins()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -43,6 +46,16 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         longPressGR.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longPressGR)
         testFlickrClient()
+    }
+    
+    func fetchAllPins() -> [Pin] {
+        let error: NSErrorPointer = nil
+        let fetchRequest = NSFetchRequest(entityName: "Person")
+        let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
+        if error != nil {
+            println("Error in fectchAllActors(): \(error)")
+        }
+        return results as! [Pin]
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
