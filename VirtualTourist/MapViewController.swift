@@ -10,18 +10,26 @@ import UIKit
 import MapKit
 import CoreData
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsControllerDelegate {
 
+    // MARK: - Variables
+    
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var tapPinsNotificationView: UIView!
     
-    var pins = [Pin]() // [Pin]!
-    
-    // MARK: - Core Data Convenience. This will be useful for fetching. And for adding and saving objects as well.
-    
     lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
+    }()
+    
+    lazy var fetchedResultsController: NSFetchedResultsController = {
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
+            managedObjectContext: self.sharedContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        return fetchedResultsController
     }()
     
     // MARK: - Setup UIViews
@@ -31,7 +39,8 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
         println(sharedContext)
         restoreMapRegion(false)
-        //pins = fetchAllPins()
+        // fetchedResultsController.performFetch(nil)
+        fetchedResultsController.delegate = self
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -41,21 +50,10 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         self.title = "VirtualTourist"
         tapPinsNotificationView.backgroundColor = UIColor.redColor()
         tapPinsNotificationView.hidden = true
-        
         var longPressGR = UILongPressGestureRecognizer(target: self, action: "annotate:")
         longPressGR.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longPressGR)
         testFlickrClient()
-    }
-    
-    func fetchAllPins() -> [Pin] {
-        let error: NSErrorPointer = nil
-        let fetchRequest = NSFetchRequest(entityName: "Pin")
-        let results = sharedContext.executeFetchRequest(fetchRequest, error: error)
-        if error != nil {
-            println("Error in fectchAllActors(): \(error)")
-        }
-        return results as! [Pin]
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
@@ -121,21 +119,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     }
     
     func saveMapRegion() {
-        
         let dictionary = [
             "latitude" : mapView.region.center.latitude,
             "longitude" : mapView.region.center.longitude,
             "latitudeDelta" : mapView.region.span.latitudeDelta,
             "longitudeDelta" : mapView.region.span.longitudeDelta
         ]
-        
         NSKeyedArchiver.archiveRootObject(dictionary, toFile: filePath)
     }
     
     func restoreMapRegion(animated: Bool) {
-        
         if let regionDictionary = NSKeyedUnarchiver.unarchiveObjectWithFile(filePath) as? [String : AnyObject] {
-            
             let longitude = regionDictionary["longitude"] as! CLLocationDegrees
             let latitude = regionDictionary["latitude"] as! CLLocationDegrees
             let center = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
@@ -143,7 +137,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             let latitudeDelta = regionDictionary["longitudeDelta"] as! CLLocationDegrees
             let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
             let savedRegion = MKCoordinateRegion(center: center, span: span)
-            
             mapView.setRegion(savedRegion, animated: animated)
             mapView.setCenterCoordinate(center, animated: animated)
         }
@@ -151,13 +144,28 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     func testFlickrClient() {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler() { (success, errorString) in
-            if success {
-                println("success")
-            } else {
-                println("error")
-            }
+            success ? println("success") : println("error")
         }
     }
+    
+    // MARK: - NSFetchResultsControllerDelegate Methods
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        // TODO: implement
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        // TODO: implement
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        // TODO: implement
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        // TODO: implement
+    }
+    
 }
 
 extension MapViewController : MKMapViewDelegate {
