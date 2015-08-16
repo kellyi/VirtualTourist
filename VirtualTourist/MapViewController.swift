@@ -148,7 +148,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    // MARK: - NSFetchResultsControllerDelegate Methods
+    // MARK: - NSFetchedResultsControllerDelegate Methods
     
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
         // TODO: implement
