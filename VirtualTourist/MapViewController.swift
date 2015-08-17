@@ -42,6 +42,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
         restorePersistedAnnotations()
+        println(fetchedResultsController.fetchedObjects!.count)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -106,14 +107,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func restorePersistedAnnotations() {
-        for object in fetchedResultsController.fetchedObjects! {
-            if let archivedPin = object as? Pin {
-                let latitude = CLLocationDegrees(archivedPin.latitude)
-                let longitude = CLLocationDegrees(archivedPin.longitude)
-                let annotation = Pin(annotationLatitude: latitude, annotationLongitude: longitude, context: sharedContext)
-                mapView.addAnnotation(annotation)
-            }
-        }
+        let savedPins = fetchedResultsController.fetchedObjects as! [Pin]
+        for pin in savedPins { mapView.addAnnotation(pin) }
     }
     
     // MARK: - Animate Annotation Pin Drop
@@ -174,6 +169,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        // TODO: implement
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
