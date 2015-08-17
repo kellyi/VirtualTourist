@@ -108,11 +108,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     func restorePersistedAnnotations() {
         for object in fetchedResultsController.fetchedObjects! {
             if let archivedPin = object as? Pin {
-                let annotation = MKPointAnnotation()
                 let latitude = CLLocationDegrees(archivedPin.latitude)
                 let longitude = CLLocationDegrees(archivedPin.longitude)
-                let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
-                annotation.coordinate = coordinate
+                let annotation = Pin(annotationLatitude: latitude, annotationLongitude: longitude, context: sharedContext)
                 mapView.addAnnotation(annotation)
             }
         }

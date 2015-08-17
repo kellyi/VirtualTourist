@@ -25,20 +25,13 @@ class Pin : NSManagedObject, MKAnnotation {
     @NSManaged var photos: [Photo]
     
     var coordinate: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: latitude as Double, longitude: longitude as Double)
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
-    /*
-    init(dictionary: [String : AnyObject], context: NSManagedObjectContext) {
-        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
-        super.init(entity: entity, insertIntoManagedObjectContext: context)
-        latitude = dictionary[Keys.Latitude] as! Double
-        longitude = dictionary[Keys.Longitude] as! Double
-    }
-    */
+    
     init(annotationLatitude: Double, annotationLongitude: Double, context: NSManagedObjectContext) {
         let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
