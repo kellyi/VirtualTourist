@@ -8,32 +8,41 @@
 
 import UIKit
 import CoreData
+import MapKit
 
 @objc(Pin)
 
-class Pin : NSManagedObject {
+class Pin : NSManagedObject, MKAnnotation {
     
     struct Keys {
         static let Latitude = "latitude"
         static let Longitude = "longitude"
         static let Photos = "photos"
-        static let ID = "id"
     }
     
-    @NSManaged var id: NSNumber
-    @NSManaged var latitude: String
-    @NSManaged var longitude: String
+    @NSManaged var latitude: Double
+    @NSManaged var longitude: Double
     @NSManaged var photos: [Photo]
+    
+    var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude as Double, longitude: longitude as Double)
+    }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
-    
+    /*
     init(dictionary: [String : AnyObject], context: NSManagedObjectContext) {
         let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
-        id = dictionary[Keys.ID] as! Int
-        latitude = dictionary[Keys.Latitude] as! String
-        longitude = dictionary[Keys.Longitude] as! String
+        latitude = dictionary[Keys.Latitude] as! Double
+        longitude = dictionary[Keys.Longitude] as! Double
+    }
+    */
+    init(annotationLatitude: Double, annotationLongitude: Double, context: NSManagedObjectContext) {
+        let entity = NSEntityDescription.entityForName("Pin", inManagedObjectContext: context)!
+        super.init(entity: entity, insertIntoManagedObjectContext: context)
+        latitude = annotationLatitude
+        longitude = annotationLongitude
     }
 }

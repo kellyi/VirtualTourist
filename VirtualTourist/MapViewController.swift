@@ -24,7 +24,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Pin")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "latitude", ascending: true)]
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
             managedObjectContext: self.sharedContext,
             sectionNameKeyPath: nil,
@@ -39,8 +39,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
         println(sharedContext)
         restoreMapRegion(false)
-        // fetchedResultsController.performFetch(nil)
+        fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+        restorePersistedAnnotations()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -53,7 +54,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         var longPressGR = UILongPressGestureRecognizer(target: self, action: "annotate:")
         longPressGR.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longPressGR)
-        testFlickrClient()
+        //testFlickrClient()
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
@@ -82,9 +83,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         } else if gestureRecognizer.state == UIGestureRecognizerState.Began {
             var touchPoint = gestureRecognizer.locationInView(mapView)
             var newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let annotation = MKPointAnnotation()
-            annotation.coordinate = newCoordinates
+            let annotation = Pin(annotationLatitude: newCoordinates.latitude, annotationLongitude: newCoordinates.longitude, context: sharedContext)
             mapView.addAnnotation(annotation)
+            CoreDataStackManager.sharedInstance().saveContext()
         }
     }
     
@@ -96,8 +97,24 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             */
             let demoImageVC = self.storyboard!.instantiateViewControllerWithIdentifier("demoImageVC") as! DemoSeeFlickrImageViewController
             navigationController!.pushViewController(demoImageVC, animated: true)
-        } else if let annotation = view.annotation as MKAnnotation! {
-            mapView.removeAnnotation(annotation)
+        } else {
+            let pin = view.annotation as! Pin
+            sharedContext.deleteObject(pin)
+            mapView.removeAnnotation(pin)
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
+    }
+    
+    func restorePersistedAnnotations() {
+        for object in fetchedResultsController.fetchedObjects! {
+            if let archivedPin = object as? Pin {
+                let annotation = MKPointAnnotation()
+                let latitude = CLLocationDegrees(archivedPin.latitude)
+                let longitude = CLLocationDegrees(archivedPin.longitude)
+                let coordinate = CLLocationCoordinate2DMake(latitude, longitude)
+                annotation.coordinate = coordinate
+                mapView.addAnnotation(annotation)
+            }
         }
     }
     
@@ -159,10 +176,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        // TODO: implement
     }
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        println(fetchedResultsController.fetchedObjects!.count)
         // TODO: implement
     }
     
