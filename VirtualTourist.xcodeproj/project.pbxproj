@@ -18,7 +18,6 @@
 		DFADDB6D1B77DC6C00395A5E /* FlickrClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB6C1B77DC6C00395A5E /* FlickrClient.swift */; };
 		DFADDB6F1B77E08E00395A5E /* FlickrConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB6E1B77E08E00395A5E /* FlickrConstants.swift */; };
 		DFADDB711B77E62000395A5E /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB701B77E62000395A5E /* Photo.swift */; };
-		DFADDB731B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */; };
 		DFADDB761B79544500395A5E /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB751B79544500395A5E /* Pin.swift */; };
 		DFADDB7A1B7C1FE500395A5E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */; };
 /* End PBXBuildFile section */
@@ -49,7 +48,6 @@
 		DFADDB6C1B77DC6C00395A5E /* FlickrClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrClient.swift; sourceTree = "<group>"; };
 		DFADDB6E1B77E08E00395A5E /* FlickrConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlickrConstants.swift; sourceTree = "<group>"; };
 		DFADDB701B77E62000395A5E /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
-		DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoSeeFlickrImageViewController.swift; sourceTree = "<group>"; };
 		DFADDB751B79544500395A5E /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,7 +144,6 @@
 			isa = PBXGroup;
 			children = (
 				DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */,
-				DFADDB721B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift */,
 				DF1F17741B690508005C8EE7 /* MapViewController.swift */,
 			);
 			name = ViewControllers;
@@ -252,7 +249,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DFADDB731B77E77B00395A5E /* DemoSeeFlickrImageViewController.swift in Sources */,
 				DFADDB711B77E62000395A5E /* Photo.swift in Sources */,
 				DF2A9F461B6CF2FB00F2423B /* ImageCollectionViewController.swift in Sources */,
 				DFADDB7A1B7C1FE500395A5E /* CoreDataStackManager.swift in Sources */,

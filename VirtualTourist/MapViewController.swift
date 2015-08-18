@@ -91,17 +91,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
-            /* disabling temporarily in order to use a demo imageViewController
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
-            navigationController!.pushViewController(imageCollectionVC, animated: true)
-
-            let demoImageVC = self.storyboard!.instantiateViewControllerWithIdentifier("demoImageVC") as! DemoSeeFlickrImageViewController
+            imageCollectionVC.pin = view.annotation as! Pin
             mapView.deselectAnnotation(view.annotation, animated: false)
-            navigationController!.pushViewController(demoImageVC, animated: true)
-            */
             let pinLat = view.annotation.coordinate.latitude
             let pinLon = view.annotation.coordinate.longitude
             testFlickrClient(pinLat, longitude: pinLon)
+            navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
             let pin = view.annotation as! Pin
             sharedContext.deleteObject(pin)

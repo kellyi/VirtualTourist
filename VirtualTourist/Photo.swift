@@ -23,10 +23,6 @@ class Photo : NSManagedObject {
     @NSManaged var pin: Pin?
     @NSManaged var imagePath: String?
     
-    lazy var sharedContext = {
-        CoreDataStackManager.sharedInstance().managedObjectContext!
-    }()
-    
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }

@@ -14,12 +14,6 @@ import MapKit
 
 class Pin : NSManagedObject, MKAnnotation {
     
-    struct Keys {
-        static let Latitude = "latitude"
-        static let Longitude = "longitude"
-        static let Photos = "photos"
-    }
-    
     @NSManaged var latitude: Double
     @NSManaged var longitude: Double
     @NSManaged var photos: [Photo]

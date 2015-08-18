@@ -47,6 +47,20 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        addPinAnnotationAndCenter()
+    }
+    
+    // MARK: - MapView Methods
+    
+    func addPinAnnotationAndCenter() {
+        let deltaValue = 0.5
+        let longitudeDelta = CLLocationDegrees(deltaValue)
+        let latitudeDelta = CLLocationDegrees(deltaValue)
+        let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
+        let region = MKCoordinateRegion(center: pin.coordinate, span: span)
+        mapView.setRegion(region, animated: false)
+        mapView.addAnnotation(pin)
+        mapView.setCenterCoordinate(pin.coordinate, animated: false)
     }
     
     // MARK: - UICollectionViewDelegate Methods

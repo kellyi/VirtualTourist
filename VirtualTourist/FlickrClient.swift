@@ -13,15 +13,7 @@ class FlickrClient : NSObject {
     var photos: [Photo] = []
     
     let flickrAPIKey = FlickrClient.Constants.ApiKey
-    //let baseURL = FlickrClient.Constants.BaseURL
-    //let methodName = FlickrClient.Constants.MethodName
-    //let extras = FlickrClient.Constants.Extras
-    //let safeSearch = FlickrClient.Constants.SafeSearch
-    //let dataFormat = FlickrClient.Constants.DataFormat
-    //let noJSONCallback = FlickrClient.Constants.NoJSONCallback
-    //let contentType = FlickrClient.Constants.ContentType
-    let license = FlickrClient.Constants.License
-    //let testBBox = "-76.1667%2C38.95%2C-74.1667%2C40.95"
+    let license = "1,2,3,4,5,6,8" // public domain and select creative commons licenses
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
@@ -55,9 +47,8 @@ class FlickrClient : NSObject {
     // MARK: - Create Bounding Box for API Call
     
     func createBoundingBoxString(latitude: Double, longitude: Double) -> String {
-        
-        let bounding_box_half_width = 1.0
-        let bounding_box_half_height = 1.0
+        let bounding_box_half_width = 0.3
+        let bounding_box_half_height = 0.3
         let lat_min = -90.0
         let lat_max = 90.0
         let lon_min = -180.0
@@ -66,7 +57,6 @@ class FlickrClient : NSObject {
         let bottom_left_lat = max(latitude - bounding_box_half_height, lat_min)
         let top_right_lon = min(longitude + bounding_box_half_width, lon_max)
         let top_right_lat = min(latitude + bounding_box_half_height, lat_max)
-        
         return "\(bottom_left_lon),\(bottom_left_lat),\(top_right_lon),\(top_right_lat)"
     }
     
