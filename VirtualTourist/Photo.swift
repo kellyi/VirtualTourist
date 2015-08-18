@@ -16,12 +16,16 @@ class Photo : NSManagedObject {
     struct Keys {
         static let ID = "id"
         static let ImagePath = "image_path"
+        static let Title = "title"
+        static let FlickrURL = "flickrURL"
         // TODO: additional keys
     }
     
-    @NSManaged var id: NSNumber
+    @NSManaged var id: String?
     @NSManaged var pin: Pin?
     @NSManaged var imagePath: String?
+    @NSManaged var title: String?
+    @NSManaged var flickrURL: String?
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -32,5 +36,8 @@ class Photo : NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         
         // TODO: initialize variablies from dictionary
+        id = dictionary[Keys.ID] as? String!
+        title = dictionary[Keys.Title] as? String!
+        flickrURL = dictionary[Keys.FlickrURL] as? String!
     }
 }

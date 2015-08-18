@@ -96,7 +96,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             mapView.deselectAnnotation(view.annotation, animated: false)
             let pinLat = view.annotation.coordinate.latitude
             let pinLon = view.annotation.coordinate.longitude
-            testFlickrClient(pinLat, longitude: pinLon)
+            //testFlickrClient(pinLat, longitude: pinLon)
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
             let pin = view.annotation as! Pin

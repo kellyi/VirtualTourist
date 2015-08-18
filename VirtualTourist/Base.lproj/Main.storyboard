@@ -184,6 +184,13 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
+                                <imageView key="backgroundView" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="9Xn-4D-e3M">
+                                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                    <variation key="widthClass=compact" fixedFrame="YES">
+                                        <rect key="frame" x="0.0" y="0.0" width="400" height="350"/>
+                                    </variation>
+                                </imageView>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="imageViewCell" reuseIdentifier="imageViewCell" id="eJx-8H-Itl">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
@@ -275,65 +282,12 @@
                         <outlet property="imageCollectionView" destination="Xg0-FJ-oiN" id="JH7-BT-zv4"/>
                         <outlet property="mapView" destination="dmd-VF-Tzv" id="KmJ-HY-hai"/>
                         <outlet property="newCollectionButton" destination="Nta-yS-jzO" id="iR7-qv-xS1"/>
+                        <outlet property="tempImageView" destination="9Xn-4D-e3M" id="ZiB-nP-ida"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cmd-EZ-HqD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2107.5" y="392"/>
-        </scene>
-        <!--Demo See Flickr Image View Controller-->
-        <scene sceneID="hJH-no-VTn">
-            <objects>
-                <viewController storyboardIdentifier="demoImageVC" id="c4I-e9-j0A" customClass="DemoSeeFlickrImageViewController" customModule="VirtualTourist" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="nba-iA-HGY"/>
-                        <viewControllerLayoutGuide type="bottom" id="g7h-4M-n2R"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="0Ij-vA-cCU">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2HT-ST-8BN">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="2HT-ST-8BN" firstAttribute="leading" secondItem="0Ij-vA-cCU" secondAttribute="leadingMargin" constant="-16" id="D8C-Lm-CbD"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="2HT-ST-8BN" secondAttribute="trailing" constant="-16" id="Vq7-0C-riC"/>
-                            <constraint firstItem="2HT-ST-8BN" firstAttribute="top" secondItem="0Ij-vA-cCU" secondAttribute="topMargin" id="XQe-4R-wX1"/>
-                            <constraint firstItem="g7h-4M-n2R" firstAttribute="top" secondItem="2HT-ST-8BN" secondAttribute="bottom" id="w5Y-uN-oPg"/>
-                        </constraints>
-                        <variation key="default">
-                            <mask key="subviews">
-                                <exclude reference="2HT-ST-8BN"/>
-                            </mask>
-                            <mask key="constraints">
-                                <exclude reference="w5Y-uN-oPg"/>
-                                <exclude reference="D8C-Lm-CbD"/>
-                                <exclude reference="Vq7-0C-riC"/>
-                                <exclude reference="XQe-4R-wX1"/>
-                            </mask>
-                        </variation>
-                        <variation key="widthClass=compact">
-                            <mask key="subviews">
-                                <include reference="2HT-ST-8BN"/>
-                            </mask>
-                            <mask key="constraints">
-                                <include reference="w5Y-uN-oPg"/>
-                                <include reference="D8C-Lm-CbD"/>
-                                <include reference="Vq7-0C-riC"/>
-                                <include reference="XQe-4R-wX1"/>
-                            </mask>
-                        </variation>
-                    </view>
-                    <connections>
-                        <outlet property="imageView" destination="2HT-ST-8BN" id="Pte-Uo-QLm"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="xcJ-2z-80Z" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2106" y="1087"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="wR7-WQ-ZY9">

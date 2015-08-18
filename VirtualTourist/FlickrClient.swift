@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 class FlickrClient : NSObject {
     
@@ -17,6 +18,10 @@ class FlickrClient : NSObject {
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
+    
+    lazy var sharedContext: NSManagedObjectContext = {
+        return CoreDataStackManager.sharedInstance().managedObjectContext!
+    }()
     
     override init() {
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
@@ -36,12 +41,36 @@ class FlickrClient : NSObject {
                 var error: NSError?
                 let result = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary?
                 if let result = result {
-                    println(result)
+                    if let dictResult = result["photos"] as! NSDictionary? {
+                        if let arrayResult = dictResult["photo"] as! NSArray? {
+                            if arrayResult.count >= 1 {
+                                if let pic = self.photoFromDictionary(arrayResult[1] as! NSDictionary) {
+                                    println(pic.flickrURL)
+                                }
+                            }
+                        }
+                    }
                 }
                 completionHandler(success: true, errorString: nil)
             }
         }
         task.resume()
+    }
+    
+    func photoFromDictionary(photoDictionary: NSDictionary) -> Photo? {
+        let photoID = photoDictionary["id"] as! String
+        let title = photoDictionary["title"] as! String
+        let farm = photoDictionary["farm"] as! NSNumber
+        let server = photoDictionary["server"] as! String
+        let secret = photoDictionary["secret"] as! String
+        let flickrURL = getPhotoURL(photoID, farm: farm, server: server, secret: secret)
+        let initializerDictionary = ["id": photoID, "title": title, "flickrURL": flickrURL] as [String:AnyObject]
+        return Photo(dictionary: initializerDictionary, context: sharedContext)
+    }
+    
+    // Convenience method to turn photo dictionary into a URL
+    func getPhotoURL(id: String, farm: NSNumber, server: String, secret: String) -> String {
+        return "https://farm\(farm).staticflickr.com/\(server)/\(id)_\(secret).jpg"
     }
     
     // MARK: - Create Bounding Box for API Call
@@ -64,11 +93,9 @@ class FlickrClient : NSObject {
     
     // make this class a singleton to share across classes
     class func sharedInstance() -> FlickrClient {
-        
         struct Singleton {
             static var sharedInstance = FlickrClient()
         }
-        
         return Singleton.sharedInstance
     }
 }

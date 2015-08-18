@@ -18,6 +18,8 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     @IBOutlet weak var mapView: MKMapView!
     
+    @IBOutlet weak var tempImageView: UIImageView!
+    
     @IBOutlet weak var imageCollectionView: UICollectionView!
 
     @IBOutlet weak var newCollectionButton: UIButton!
@@ -48,6 +50,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
+        testFlickrClient(pin.latitude, longitude: pin.longitude)
     }
     
     // MARK: - MapView Methods
@@ -96,5 +99,13 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         // TODO: implement
+    }
+    
+    // MARK: - Test
+    
+    func testFlickrClient(latitude: Double, longitude: Double) {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(latitude, longitude: longitude) { (success, errorString) in
+            success ? println("success") : println("error")
+        }
     }
 }
