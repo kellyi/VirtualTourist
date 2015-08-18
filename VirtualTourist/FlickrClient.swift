@@ -21,7 +21,7 @@ class FlickrClient : NSObject {
     //let noJSONCallback = FlickrClient.Constants.NoJSONCallback
     //let contentType = FlickrClient.Constants.ContentType
     let license = FlickrClient.Constants.License
-    let testBBox = "-76.1667%2C38.95%2C-74.1667%2C40.95"
+    //let testBBox = "-76.1667%2C38.95%2C-74.1667%2C40.95"
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
@@ -32,9 +32,10 @@ class FlickrClient : NSObject {
         super.init()
     }
     
-    func getPhotosUsingCompletionHandler(completionHandler: (success: Bool, errorString: String?) -> Void) {
+    func getPhotosUsingCompletionHandler(latitude: Double, longitude: Double, completionHandler: (success: Bool, errorString: String?) -> Void) {
         
-        let flickrSearchURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrAPIKey)&license=\(license)&bbox=\(testBBox)&safe_search=1&content_type=1&format=json&nojsoncallback=1"
+        let computedBBox = createBoundingBoxString(latitude, longitude: longitude)
+        let flickrSearchURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrAPIKey)&license=\(license)&bbox=\(computedBBox)&safe_search=1&content_type=1&format=json&nojsoncallback=1"
         let request = NSMutableURLRequest(URL: NSURL(string: flickrSearchURL)!)
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {

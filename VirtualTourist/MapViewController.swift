@@ -55,7 +55,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         var longPressGR = UILongPressGestureRecognizer(target: self, action: "annotate:")
         longPressGR.minimumPressDuration = 0.5
         mapView.addGestureRecognizer(longPressGR)
-        //testFlickrClient()
     }
     
     // MARK: - Handle "Edit" UIBarButtonItem actions
@@ -95,9 +94,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             /* disabling temporarily in order to use a demo imageViewController
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
             navigationController!.pushViewController(imageCollectionVC, animated: true)
-            */
+
             let demoImageVC = self.storyboard!.instantiateViewControllerWithIdentifier("demoImageVC") as! DemoSeeFlickrImageViewController
+            mapView.deselectAnnotation(view.annotation, animated: false)
             navigationController!.pushViewController(demoImageVC, animated: true)
+            */
+            let pinLat = view.annotation.coordinate.latitude
+            let pinLon = view.annotation.coordinate.longitude
+            testFlickrClient(pinLat, longitude: pinLon)
         } else {
             let pin = view.annotation as! Pin
             sharedContext.deleteObject(pin)
@@ -107,8 +111,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func restorePersistedAnnotations() {
-        let savedPins = fetchedResultsController.fetchedObjects as! [Pin]
-        for pin in savedPins { mapView.addAnnotation(pin) }
+        for pin in fetchedResultsController.fetchedObjects as! [Pin] { mapView.addAnnotation(pin) }
     }
     
     // MARK: - Animate Annotation Pin Drop
@@ -152,8 +155,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    func testFlickrClient() {
-        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler() { (success, errorString) in
+    func testFlickrClient(latitude: Double, longitude: Double) {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(latitude, longitude: longitude) { (success, errorString) in
             success ? println("success") : println("error")
         }
     }
