@@ -15,7 +15,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - Variables
     
     var pin: Pin!
-    var pic: Photo?
     
     @IBOutlet weak var mapView: MKMapView!
     
