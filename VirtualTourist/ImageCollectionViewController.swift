@@ -19,8 +19,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     @IBOutlet weak var mapView: MKMapView!
     
-    @IBOutlet weak var tempImageView: UIImageView!
-    
     @IBOutlet weak var imageCollectionView: UICollectionView!
 
     @IBOutlet weak var newCollectionButton: UIButton!
@@ -51,7 +49,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
-        testFlickrClient(pin)
+        println(pin.photos.count)
     }
     
     // MARK: - MapView Methods
@@ -79,7 +77,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         // let pic = fetchedResultsController.objectAtIndexPath(indexPath) as Photo
         // TODO: implement
         
-        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! UICollectionViewCell
+        let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! ImageCollectionViewCell
         cell.backgroundColor = UIColor.greenColor()
         return cell
     }
@@ -100,27 +98,5 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         // TODO: implement
-    }
-    
-    // MARK: - Test
-    
-    func testFlickrClient(pin: Pin) {
-        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            if success {
-                if pin.photos.count >= 1 {
-                    self.pic = Array(pin.photos)[0]
-                    println(pin.photos.count)
-                    if let imageURL = self.pic?.flickrURL {
-                        let convertedImageURL = NSURL(string: imageURL)
-                        let imageData = NSData(contentsOfURL: convertedImageURL!)
-                        dispatch_async(dispatch_get_main_queue(), {
-                            self.tempImageView.image = UIImage(data: imageData!)
-                        })
-                    }
-                }
-            } else {
-                println(errorString)
-            }
-        }
     }
 }

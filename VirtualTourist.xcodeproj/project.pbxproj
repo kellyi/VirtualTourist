@@ -20,6 +20,7 @@
 		DFADDB711B77E62000395A5E /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB701B77E62000395A5E /* Photo.swift */; };
 		DFADDB761B79544500395A5E /* Pin.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB751B79544500395A5E /* Pin.swift */; };
 		DFADDB7A1B7C1FE500395A5E /* CoreDataStackManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */; };
+		DFBAEE2E1B8432DE00177385 /* ImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFBAEE2D1B8432DE00177385 /* ImageCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		DFADDB701B77E62000395A5E /* Photo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
 		DFADDB751B79544500395A5E /* Pin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Pin.swift; sourceTree = "<group>"; };
 		DFADDB791B7C1FE500395A5E /* CoreDataStackManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStackManager.swift; sourceTree = "<group>"; };
+		DFBAEE2D1B8432DE00177385 /* ImageCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -145,6 +147,7 @@
 			children = (
 				DF2A9F451B6CF2FB00F2423B /* ImageCollectionViewController.swift */,
 				DF1F17741B690508005C8EE7 /* MapViewController.swift */,
+				DFBAEE2D1B8432DE00177385 /* ImageCollectionViewCell.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 				DFADDB761B79544500395A5E /* Pin.swift in Sources */,
 				DF1F17751B690508005C8EE7 /* MapViewController.swift in Sources */,
 				DF1F17731B690508005C8EE7 /* VirtualTourist.xcdatamodeld in Sources */,
+				DFBAEE2E1B8432DE00177385 /* ImageCollectionViewCell.swift in Sources */,
 				DF1F17701B690508005C8EE7 /* AppDelegate.swift in Sources */,
 				DFADDB6F1B77E08E00395A5E /* FlickrConstants.swift in Sources */,
 				DFADDB6D1B77DC6C00395A5E /* FlickrClient.swift in Sources */,
