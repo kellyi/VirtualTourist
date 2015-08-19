@@ -15,6 +15,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - Variables
     
     var pin: Pin!
+    var pic: Photo?
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -50,7 +51,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
-        testFlickrClient(pin.latitude, longitude: pin.longitude)
+        testFlickrClient(pin)
     }
     
     // MARK: - MapView Methods
@@ -69,7 +70,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - UICollectionViewDelegate Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return 1
         // let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
         // return sectionInfo.numberOfObjects
     }
@@ -103,9 +104,23 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     // MARK: - Test
     
-    func testFlickrClient(latitude: Double, longitude: Double) {
-        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(latitude, longitude: longitude) { (success, errorString) in
-            success ? println("success") : println("error")
+    func testFlickrClient(pin: Pin) {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
+            if success {
+                if pin.photos.count >= 1 {
+                    self.pic = Array(pin.photos)[0]
+                    println(pin.photos.count)
+                    if let imageURL = self.pic?.flickrURL {
+                        let convertedImageURL = NSURL(string: imageURL)
+                        let imageData = NSData(contentsOfURL: convertedImageURL!)
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.tempImageView.image = UIImage(data: imageData!)
+                        })
+                    }
+                }
+            } else {
+                println(errorString)
+            }
         }
     }
 }

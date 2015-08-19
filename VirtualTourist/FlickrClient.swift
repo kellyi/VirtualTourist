@@ -11,10 +11,8 @@ import CoreData
 
 class FlickrClient : NSObject {
     
-    var photos: [Photo] = []
-    
     let flickrAPIKey = FlickrClient.Constants.ApiKey
-    let license = "1,2,3,4,5,6,8" // public domain and select creative commons licenses
+    let license = "1,2,3,4,5,6,8" // public domain and select Creative Commons licenses
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
@@ -29,8 +27,9 @@ class FlickrClient : NSObject {
         super.init()
     }
     
-    func getPhotosUsingCompletionHandler(latitude: Double, longitude: Double, completionHandler: (success: Bool, errorString: String?) -> Void) {
-        
+    func getPhotosUsingCompletionHandler(pin: Pin, completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let latitude = pin.coordinate.latitude
+        let longitude = pin.coordinate.longitude
         let computedBBox = createBoundingBoxString(latitude, longitude: longitude)
         let flickrSearchURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrAPIKey)&license=\(license)&bbox=\(computedBBox)&safe_search=1&content_type=1&format=json&nojsoncallback=1"
         let request = NSMutableURLRequest(URL: NSURL(string: flickrSearchURL)!)
@@ -44,8 +43,9 @@ class FlickrClient : NSObject {
                     if let dictResult = result["photos"] as! NSDictionary? {
                         if let arrayResult = dictResult["photo"] as! NSArray? {
                             if arrayResult.count >= 1 {
-                                if let pic = self.photoFromDictionary(arrayResult[1] as! NSDictionary) {
-                                    println(pic.flickrURL)
+                                for pic in arrayResult {
+                                    let newPic = self.photoFromDictionary(pic as! NSDictionary)
+                                    pin.photos.insert(newPic!)
                                 }
                             }
                         }

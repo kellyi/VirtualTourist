@@ -37,7 +37,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "Back", style: .Plain, target: nil, action: nil)
-        println(sharedContext)
         restoreMapRegion(false)
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
@@ -85,6 +84,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             var newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
             let annotation = Pin(annotationLatitude: newCoordinates.latitude, annotationLongitude: newCoordinates.longitude, context: sharedContext)
             mapView.addAnnotation(annotation)
+            testFlickrClient(annotation)
             CoreDataStackManager.sharedInstance().saveContext()
         }
     }
@@ -94,9 +94,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
             imageCollectionVC.pin = view.annotation as! Pin
             mapView.deselectAnnotation(view.annotation, animated: false)
-            let pinLat = view.annotation.coordinate.latitude
-            let pinLon = view.annotation.coordinate.longitude
-            //testFlickrClient(pinLat, longitude: pinLon)
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
             let pin = view.annotation as! Pin
@@ -151,9 +148,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    func testFlickrClient(latitude: Double, longitude: Double) {
-        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(latitude, longitude: longitude) { (success, errorString) in
-            success ? println("success") : println("error")
+    func testFlickrClient(pin: Pin) {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
+            println(pin.photos.count)
         }
     }
     
