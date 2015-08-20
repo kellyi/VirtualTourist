@@ -15,6 +15,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - Variables
     
     var pin: Pin!
+    var photos: [Photo] {
+        return Array(pin!.photos)
+    }
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -48,7 +51,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
-        println(pin.photos.count)
     }
     
     // MARK: - MapView Methods
@@ -67,7 +69,8 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - UICollectionViewDelegate Methods
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        println(pin.photos.count)
+        return pin.photos.count
         // let sectionInfo = self.fetchedResultsController.sections![section] as NSFetchedResultsSectionInfo
         // return sectionInfo.numberOfObjects
     }
@@ -77,7 +80,11 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         // TODO: implement
         
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! ImageCollectionViewCell
-        cell.backgroundColor = UIColor.greenColor()
+        cell.backgroundColor = UIColor.blueColor()
+        let photoURLString = photos[indexPath.row].flickrURL!
+        let imageURL = NSURL(string: photoURLString)
+        let imageData = NSData(contentsOfURL: imageURL!)
+        cell.imageCollectionViewCellImage.image = UIImage(data: imageData!)
         return cell
     }
     

@@ -150,7 +150,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func testFlickrClient(pin: Pin) {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            println(pin.photos.count)
+            //println(pin.photos.count)
         }
     }
     

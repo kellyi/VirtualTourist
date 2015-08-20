@@ -11,8 +11,14 @@ import CoreData
 
 class FlickrClient : NSObject {
     
+    // replace with your own Flickr API Key
     let flickrAPIKey = FlickrClient.Constants.ApiKey
-    let license = "1,2,3,4,5,6,8" // public domain and select Creative Commons licenses
+    
+    // public domain and select Creative Commons licenses
+    let license = "1,2,3,4,5,6,8"
+    let flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search"
+    let flickrExtraParams = "&safe_search=1&content_type=1&format=json&nojsoncallback=1"
+    let perPage = "21"
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
@@ -31,7 +37,31 @@ class FlickrClient : NSObject {
         let latitude = pin.coordinate.latitude
         let longitude = pin.coordinate.longitude
         let computedBBox = createBoundingBoxString(latitude, longitude: longitude)
-        let flickrSearchURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(flickrAPIKey)&license=\(license)&bbox=\(computedBBox)&safe_search=1&content_type=1&format=json&nojsoncallback=1"
+        let flickrSearchURL = "\(flickrURL)&api_key=\(flickrAPIKey)&license=\(license)&per_page=\(perPage)&bbox=\(computedBBox)\(flickrExtraParams)"
+        let request = NSMutableURLRequest(URL: NSURL(string: flickrSearchURL)!)
+        let task = session.dataTaskWithRequest(request) { data, response, error in
+            if error != nil {
+                completionHandler(success: false, errorString: "Encountered an error")
+            } else {
+                var error: NSError?
+                let result = NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.AllowFragments, error: &error) as! NSDictionary?
+                if let result = result {
+                    if let dictResult = result["photos"] as! NSDictionary? {
+                        if let totalPages = dictResult["pages"] as? Int {
+                            let pageLimit = min(totalPages, 40)
+                            let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
+                            self.getPhotosWithPageUsingCompletionHandler(pin, bboxString: computedBBox, pageNumber: randomPage, completionHandler: completionHandler)
+                        }
+                    }
+                }
+                completionHandler(success: true, errorString: nil)
+            }
+        }
+        task.resume()
+    }
+    
+    func getPhotosWithPageUsingCompletionHandler(pin: Pin, bboxString: String, pageNumber: Int, completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let flickrSearchURL = "\(flickrURL)&api_key=\(flickrAPIKey)&license=\(license)&per_page=21&page=\(pageNumber)&bbox=\(bboxString)\(flickrExtraParams)"
         let request = NSMutableURLRequest(URL: NSURL(string: flickrSearchURL)!)
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
