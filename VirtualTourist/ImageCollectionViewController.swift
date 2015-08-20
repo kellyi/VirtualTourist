@@ -48,7 +48,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         super.viewDidLoad()
         //fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
-        //imageCollectionView.backgroundColor = .ocean()
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -115,13 +114,4 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         // TODO: implement
     }
-}
-
-// MARK: - Add Ocean UIColor
-extension UIColor {
-    
-    class func ocean() -> UIColor {
-        return UIColor(red:0/255, green:64/255, blue:128/255, alpha:1.0)
-    }
-    
 }

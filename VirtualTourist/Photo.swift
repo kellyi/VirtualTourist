@@ -34,10 +34,22 @@ class Photo : NSManagedObject {
     init(dictionary: [String : AnyObject], context: NSManagedObjectContext) {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
-        
-        // TODO: initialize variablies from dictionary
         id = dictionary[Keys.ID] as? String!
         title = dictionary[Keys.Title] as? String!
         flickrURL = dictionary[Keys.FlickrURL] as? String!
+        // TODO: download the flickr image to the documents directory
+    }
+    
+    override func prepareForDeletion() {
+        
+        //Delete the associated image file when the Photo managed object is deleted.
+        if let fileName = imagePath?.lastPathComponent {
+            
+            let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+            let pathArray = [dirPath, fileName]
+            let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
+            
+            NSFileManager.defaultManager().removeItemAtURL(fileURL, error: nil)
+        }
     }
 }
