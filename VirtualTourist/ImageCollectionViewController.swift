@@ -22,7 +22,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
-
+    
+    @IBOutlet weak var buttonView: UIView!
+    
     @IBOutlet weak var newCollectionButton: UIButton!
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -46,11 +48,22 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         super.viewDidLoad()
         //fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
+        //imageCollectionView.backgroundColor = .ocean()
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
+    }
+    
+    @IBAction func newCollectionButtonPressed(sender: AnyObject) {
+        self.pin.photos.removeAll(keepCapacity: false)
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
+            dispatch_async(dispatch_get_main_queue(), {
+                self.imageCollectionView.reloadData()
+            })
+            CoreDataStackManager.sharedInstance().saveContext()
+        }
     }
     
     // MARK: - MapView Methods
@@ -77,10 +90,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // let pic = fetchedResultsController.objectAtIndexPath(indexPath) as Photo
-        // TODO: implement
-        
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! ImageCollectionViewCell
-        cell.backgroundColor = UIColor.blueColor()
         let photoURLString = photos[indexPath.row].flickrURL!
         let imageURL = NSURL(string: photoURLString)
         let imageData = NSData(contentsOfURL: imageURL!)
@@ -105,4 +115,13 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         // TODO: implement
     }
+}
+
+// MARK: - Add Ocean UIColor
+extension UIColor {
+    
+    class func ocean() -> UIColor {
+        return UIColor(red:0/255, green:64/255, blue:128/255, alpha:1.0)
+    }
+    
 }

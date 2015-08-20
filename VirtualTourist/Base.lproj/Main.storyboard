@@ -147,6 +147,9 @@
                                                 <include reference="nIi-Mk-cKA"/>
                                             </mask>
                                         </variation>
+                                        <connections>
+                                            <action selector="newCollectionButtonPressed:" destination="uuH-Ll-xkP" eventType="touchUpInside" id="i8e-5N-Vis"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
@@ -176,27 +179,46 @@
                                     </mask>
                                 </variation>
                             </view>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dmd-VF-Tzv">
+                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="165" id="i6t-hO-n91"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="i6t-hO-n91"/>
+                                    </mask>
+                                </variation>
+                                <variation key="widthClass=compact">
+                                    <mask key="constraints">
+                                        <include reference="i6t-hO-n91"/>
+                                    </mask>
+                                </variation>
+                                <connections>
+                                    <outlet property="delegate" destination="uuH-Ll-xkP" id="7qt-WS-8Jo"/>
+                                </connections>
+                            </mapView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Xg0-FJ-oiN">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.29803922772407532" green="0.29803922772407532" blue="0.29803922772407532" alpha="1" colorSpace="calibratedRGB"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="Vmq-0a-ebc">
-                                    <size key="itemSize" width="115" height="115"/>
+                                    <size key="itemSize" width="110" height="110"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
                                 </collectionViewFlowLayout>
                                 <cells>
                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" restorationIdentifier="imageViewCell" reuseIdentifier="imageViewCell" id="eJx-8H-Itl" customClass="ImageCollectionViewCell" customModule="VirtualTourist" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="110" height="110"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="kOH-Mw-Kbe">
                                                     <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
                                                     <variation key="widthClass=compact" fixedFrame="YES">
-                                                        <rect key="frame" x="0.0" y="0.0" width="115" height="115"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="110" height="110"/>
                                                     </variation>
                                                 </imageView>
                                             </subviews>
@@ -222,25 +244,6 @@
                                     <outlet property="dataSource" destination="uuH-Ll-xkP" id="msu-FL-2Nw"/>
                                 </connections>
                             </collectionView>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="dmd-VF-Tzv">
-                                <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="165" id="i6t-hO-n91"/>
-                                </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="i6t-hO-n91"/>
-                                    </mask>
-                                </variation>
-                                <variation key="widthClass=compact">
-                                    <mask key="constraints">
-                                        <include reference="i6t-hO-n91"/>
-                                    </mask>
-                                </variation>
-                                <connections>
-                                    <outlet property="delegate" destination="uuH-Ll-xkP" id="7qt-WS-8Jo"/>
-                                </connections>
-                            </mapView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -258,8 +261,8 @@
                         <variation key="default">
                             <mask key="subviews">
                                 <exclude reference="Bkr-WL-zTG"/>
-                                <exclude reference="Xg0-FJ-oiN"/>
                                 <exclude reference="dmd-VF-Tzv"/>
+                                <exclude reference="Xg0-FJ-oiN"/>
                             </mask>
                             <mask key="constraints">
                                 <exclude reference="sYo-jf-zVk"/>
@@ -277,8 +280,8 @@
                         <variation key="widthClass=compact">
                             <mask key="subviews">
                                 <include reference="Bkr-WL-zTG"/>
-                                <include reference="Xg0-FJ-oiN"/>
                                 <include reference="dmd-VF-Tzv"/>
+                                <include reference="Xg0-FJ-oiN"/>
                             </mask>
                             <mask key="constraints">
                                 <include reference="sYo-jf-zVk"/>
@@ -295,9 +298,10 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="buttonView" destination="Bkr-WL-zTG" id="qLe-Ym-AIx"/>
                         <outlet property="imageCollectionView" destination="Xg0-FJ-oiN" id="JH7-BT-zv4"/>
                         <outlet property="mapView" destination="dmd-VF-Tzv" id="KmJ-HY-hai"/>
-                        <outlet property="newCollectionButton" destination="Nta-yS-jzO" id="iR7-qv-xS1"/>
+                        <outlet property="newCollectionButton" destination="Nta-yS-jzO" id="Ibd-A1-uHx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cmd-EZ-HqD" userLabel="First Responder" sceneMemberID="firstResponder"/>

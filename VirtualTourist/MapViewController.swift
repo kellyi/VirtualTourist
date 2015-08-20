@@ -84,8 +84,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             var newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
             let annotation = Pin(annotationLatitude: newCoordinates.latitude, annotationLongitude: newCoordinates.longitude, context: sharedContext)
             mapView.addAnnotation(annotation)
-            testFlickrClient(annotation)
             CoreDataStackManager.sharedInstance().saveContext()
+            getPhotosUsingFlickrClient(annotation)
         }
     }
     
@@ -104,7 +104,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func restorePersistedAnnotations() {
-        for pin in fetchedResultsController.fetchedObjects as! [Pin] { mapView.addAnnotation(pin) }
+        for pin in fetchedResultsController.fetchedObjects as! [Pin] {
+            mapView.addAnnotation(pin)
+        }
     }
     
     // MARK: - Animate Annotation Pin Drop
@@ -148,9 +150,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         }
     }
     
-    func testFlickrClient(pin: Pin) {
+    func getPhotosUsingFlickrClient(pin: Pin) {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            //println(pin.photos.count)
+            println(pin.photos.count)
+            CoreDataStackManager.sharedInstance().saveContext()
         }
     }
     
