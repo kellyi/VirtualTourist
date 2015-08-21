@@ -242,6 +242,7 @@
                                 </cells>
                                 <connections>
                                     <outlet property="dataSource" destination="uuH-Ll-xkP" id="msu-FL-2Nw"/>
+                                    <outlet property="delegate" destination="uuH-Ll-xkP" id="EhH-jB-Y7C"/>
                                 </connections>
                             </collectionView>
                         </subviews>

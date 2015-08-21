@@ -92,7 +92,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     func mapView(mapView: MKMapView!, didSelectAnnotationView view: MKAnnotationView!) {
         if self.navigationItem.rightBarButtonItem?.title == "Edit" {
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
-            imageCollectionVC.pin = view.annotation as! Pin
+            let pin = view.annotation as! Pin
+            imageCollectionVC.pin = pin
+            imageCollectionVC.photos = Array(pin.photos)
             mapView.deselectAnnotation(view.annotation, animated: false)
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
@@ -105,7 +107,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func restorePersistedAnnotations() {
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
-            println(pin.photos.count)
+            println(pin.photos)
             mapView.addAnnotation(pin)
         }
     }
@@ -153,7 +155,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func getPhotosUsingFlickrClient(pin: Pin) {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            println(pin.photos.count)
             CoreDataStackManager.sharedInstance().saveContext()
         }
     }

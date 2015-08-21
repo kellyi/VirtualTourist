@@ -15,9 +15,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     // MARK: - Variables
     
     var pin: Pin!
-    var photos: [Photo] {
-        return Array(pin!.photos)
-    }
+    var photos: [Photo]!
+    //    return Array(pin!.photos)
+    //}
     
     @IBOutlet weak var mapView: MKMapView!
     
@@ -52,7 +52,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     }
     
     @IBAction func newCollectionButtonPressed(sender: AnyObject) {
-        self.pin.photos.removeAll(keepCapacity: false)
+        for photo in pin.photos {
+            photo.deleteFile()
+        }
+        pin.photos.removeAll(keepCapacity: false)
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
             dispatch_async(dispatch_get_main_queue(), {
                 self.imageCollectionView.reloadData()
@@ -91,6 +94,16 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
             cell.imageCollectionViewCellImage.image = photoImage
         }
         return cell
+    }
+    
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        
+        let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCollectionViewCell
+        cell.imageCollectionViewCellImage.image = nil
+        let photo = photos[indexPath.row]
+        photo.deleteFile()
+        photos.removeAtIndex(indexPath.row)
+        println(photos.count)
     }
     
     // MARK: - NSFetchedResultsControllerDelegate Methods
