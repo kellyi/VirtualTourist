@@ -90,9 +90,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // let pic = fetchedResultsController.objectAtIndexPath(indexPath) as Photo
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! ImageCollectionViewCell
-        let photoURLString = photos[indexPath.row].flickrURL!
-        let imageURL = NSURL(string: photoURLString)
-        let imageData = NSData(contentsOfURL: imageURL!)
+        let photoURLString = photos[indexPath.row].imagePath!
+        //let imageURL = NSURL(string: )
+        let imageData = NSData(contentsOfURL: photoURLString as! String)
         cell.imageCollectionViewCellImage.image = UIImage(data: imageData!)
         return cell
     }

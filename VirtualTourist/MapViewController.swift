@@ -105,6 +105,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func restorePersistedAnnotations() {
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
+            println(pin.photos.count)
             mapView.addAnnotation(pin)
         }
     }
