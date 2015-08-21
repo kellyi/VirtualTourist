@@ -26,16 +26,7 @@ class Photo : NSManagedObject {
     @NSManaged var imagePath: String?
     @NSManaged var title: String?
     @NSManaged var flickrURL: String?
-    /*
-    var imageData: UIImage {
-        let fileName = imagePath?.lastPathComponent
-        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
-        let pathArray = [dirPath, fileName]
-        let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
-        let imageData = NSData(contentsOfURL: fileURL)
-        return UIImage(data: imageData!)!
-    }
-    */
+    
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
@@ -48,21 +39,21 @@ class Photo : NSManagedObject {
         flickrURL = dictionary[Keys.FlickrURL] as? String!
         
         // TODO: download the flickr image to the documents directory
-        imagePath = saveImageToDocumentsDirectoryFromURL(self.id!, url: self.flickrURL!)
+        saveImageToDocumentsDirectoryFromURL()
         println(imagePath)
     }
     
-    func saveImageToDocumentsDirectoryFromURL(id: String, url: String) -> String {
+    func saveImageToDocumentsDirectoryFromURL() {
+        let fileManager = NSFileManager.defaultManager()
+        let directoryPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+        let photoFileName = "\(id!).png"
+        let filePathToWrite = "\(directoryPath)/\(photoFileName)"
         let imageURL = NSURL(string: flickrURL!)
         let imageData = NSData(contentsOfURL: imageURL!)
         let image = UIImage(data: imageData!)
-        let data = UIImagePNGRepresentation(image!)
-        let photoFileName = "\(id).png"
-        let dirPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
-        let pathArray = [dirPath, photoFileName]
-        let fileURL = NSURL.fileURLWithPathComponents(pathArray)!
-        data.writeToFile("\(fileURL)", atomically: true)
-        return "\(fileURL)"
+        let imageDataPNG = UIImagePNGRepresentation(image)
+        fileManager.createFileAtPath(filePathToWrite, contents: imageDataPNG, attributes: nil)
+        self.imagePath = filePathToWrite
     }
     
     override func prepareForDeletion() {

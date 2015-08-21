@@ -23,10 +23,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
-    @IBOutlet weak var buttonView: UIView!
-    
-    @IBOutlet weak var newCollectionButton: UIButton!
-    
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
@@ -46,7 +42,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //fetchedResultsController.performFetch(nil)
+        fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
     }
     
@@ -90,10 +86,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         // let pic = fetchedResultsController.objectAtIndexPath(indexPath) as Photo
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("imageViewCell", forIndexPath: indexPath) as! ImageCollectionViewCell
-        let photoURLString = photos[indexPath.row].imagePath!
-        //let imageURL = NSURL(string: )
-        let imageData = NSData(contentsOfURL: photoURLString as! String)
-        cell.imageCollectionViewCellImage.image = UIImage(data: imageData!)
+        let photo = photos[indexPath.row]
+        if let photoImage = UIImage(contentsOfFile: photo.imagePath!) {
+            cell.imageCollectionViewCellImage.image = photoImage
+        }
         return cell
     }
     

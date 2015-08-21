@@ -298,10 +298,8 @@
                         </variation>
                     </view>
                     <connections>
-                        <outlet property="buttonView" destination="Bkr-WL-zTG" id="qLe-Ym-AIx"/>
                         <outlet property="imageCollectionView" destination="Xg0-FJ-oiN" id="JH7-BT-zv4"/>
                         <outlet property="mapView" destination="dmd-VF-Tzv" id="KmJ-HY-hai"/>
-                        <outlet property="newCollectionButton" destination="Nta-yS-jzO" id="Ibd-A1-uHx"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cmd-EZ-HqD" userLabel="First Responder" sceneMemberID="firstResponder"/>
