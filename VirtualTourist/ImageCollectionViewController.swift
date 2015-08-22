@@ -25,7 +25,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
-    @IBOutlet weak var bottomButton: UIButton!
+    @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
@@ -64,13 +64,14 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         super.viewDidLoad()
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
-        bottomButton.titleLabel!.text = "New Collection"
+        //newCollectionButton.title = "New Collection"
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
     }
+    
     
     @IBAction func newCollectionButtonPressed(sender: AnyObject) {
         if selectedIndexes.isEmpty {
@@ -204,10 +205,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func updateBottomButton() {
         if selectedIndexes.count == 0 {
-            bottomButton.titleLabel?.text = "New Collection"
+            newCollectionButton.title = "New Collection"
             
         } else {
-            bottomButton.titleLabel?.text = "Remove Selected Photos"
+            newCollectionButton.title = "Remove Selected Photos"
         }
     }
 }

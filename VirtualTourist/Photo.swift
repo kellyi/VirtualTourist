@@ -23,8 +23,18 @@ class Photo : NSManagedObject {
     @NSManaged var id: String?
     @NSManaged var pin: Pin?
     @NSManaged var imagePath: String?
-    @NSManaged var title: String?
     @NSManaged var flickrURL: String?
+    
+    var photoImage: UIImage? {
+        
+        get {
+            return FlickrClient.Caches.imageCache.imageWithIdentifier("\(id).jpg")
+        }
+        
+        set {
+            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: "\(id).jpg")
+        }
+    }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -34,9 +44,8 @@ class Photo : NSManagedObject {
         let entity =  NSEntityDescription.entityForName("Photo", inManagedObjectContext: context)!
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         id = dictionary[Keys.ID] as? String!
-        title = dictionary[Keys.Title] as? String!
         flickrURL = dictionary[Keys.FlickrURL] as? String!
-        imagePath = saveImageToDocumentsDirectoryFromURL() as String!
+        //imagePath = saveImageToDocumentsDirectoryFromURL() as String!
         //println(imagePath!)
     }
     
@@ -54,7 +63,6 @@ class Photo : NSManagedObject {
     }
     
     override func prepareForDeletion() {
-        //println("deleting \(imagePath)")
         deleteFile()
     }
     

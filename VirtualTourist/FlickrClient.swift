@@ -50,7 +50,7 @@ class FlickrClient : NSObject {
                         if let totalPages = dictResult["pages"] as? Int {
                             let pageLimit = min(totalPages, 40)
                             let randomPage = Int(arc4random_uniform(UInt32(pageLimit))) + 1
-                            self.getPhotosWithPageUsingCompletionHandler(pin, bboxString: computedBBox, pageNumber: randomPage, completionHandler: completionHandler)
+                            self.getPhotosWithPageUsingCompletionHandler(pin, pageNumber: randomPage, completionHandler: completionHandler)
                         }
                     }
                 }
@@ -60,8 +60,11 @@ class FlickrClient : NSObject {
         task.resume()
     }
     
-    func getPhotosWithPageUsingCompletionHandler(pin: Pin, bboxString: String, pageNumber: Int, completionHandler: (success: Bool, errorString: String?) -> Void) {
-        let flickrSearchURL = "\(flickrURL)&api_key=\(flickrAPIKey)&license=\(license)&per_page=21&page=\(pageNumber)&bbox=\(bboxString)\(flickrExtraParams)"
+    func getPhotosWithPageUsingCompletionHandler(pin: Pin, pageNumber: Int, completionHandler: (success: Bool, errorString: String?) -> Void) {
+        let latitude = pin.coordinate.latitude
+        let longitude = pin.coordinate.longitude
+        let computedBBox = createBoundingBoxString(latitude, longitude: longitude)
+        let flickrSearchURL = "\(flickrURL)&api_key=\(flickrAPIKey)&license=\(license)&per_page=21&page=\(pageNumber)&bbox=\(computedBBox)\(flickrExtraParams)"
         let request = NSMutableURLRequest(URL: NSURL(string: flickrSearchURL)!)
         let task = session.dataTaskWithRequest(request) { data, response, error in
             if error != nil {
@@ -75,7 +78,7 @@ class FlickrClient : NSObject {
                             if arrayResult.count >= 1 {
                                 for pic in arrayResult {
                                     let newPic = self.photoFromDictionary(pic as! NSDictionary)
-                                    pin.photos.insert(newPic!)
+                                    newPic!.pin = pin
                                 }
                             }
                         }
@@ -89,12 +92,11 @@ class FlickrClient : NSObject {
     
     func photoFromDictionary(photoDictionary: NSDictionary) -> Photo? {
         let photoID = photoDictionary["id"] as! String
-        let title = photoDictionary["title"] as! String
         let farm = photoDictionary["farm"] as! NSNumber
         let server = photoDictionary["server"] as! String
         let secret = photoDictionary["secret"] as! String
         let flickrURL = getPhotoURL(photoID, farm: farm, server: server, secret: secret)
-        let initializerDictionary = ["id": photoID, "title": title, "flickrURL": flickrURL] as [String:AnyObject]
+        let initializerDictionary = ["id": photoID, "flickrURL": flickrURL] as [String:AnyObject]
         return Photo(dictionary: initializerDictionary, context: sharedContext)
     }
     
@@ -127,5 +129,11 @@ class FlickrClient : NSObject {
             static var sharedInstance = FlickrClient()
         }
         return Singleton.sharedInstance
+    }
+    
+    // MARK: - Shared Image Cache
+    
+    struct Caches {
+        static let imageCache = ImageCache()
     }
 }

@@ -105,7 +105,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func restorePersistedAnnotations() {
-        for pin in fetchedResultsController.fetchedObjects as! [Pin] {
+        let fetchRequest = NSFetchRequest(entityName: "Pin")
+        let restoredPins = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Pin]
+        for pin in restoredPins {
             mapView.addAnnotation(pin)
         }
     }
