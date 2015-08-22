@@ -44,8 +44,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     // MARK: - Setup UIViews
     
-    // Layout the collection view
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -59,12 +57,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         imageCollectionView.collectionViewLayout = layout
     }
 
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
-        //newCollectionButton.title = "New Collection"
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -72,6 +68,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         addPinAnnotationAndCenter()
     }
     
+    // MARK: - NewCollectionButton IBAction & Supporting Methods
     
     @IBAction func newCollectionButtonPressed(sender: AnyObject) {
         if selectedIndexes.isEmpty {
@@ -84,6 +81,14 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
             }
         } else {
             deleteSelectedPhotos()
+        }
+    }
+    
+    func updateBottomButton() {
+        if selectedIndexes.count > 0 {
+            newCollectionButton.title = "Remove Selected Photos"
+        } else {
+            newCollectionButton.title = "New Collection"
         }
     }
     
@@ -108,26 +113,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         }
         
         selectedIndexes = [NSIndexPath]()
-    }
-    
-    // MARK: - MapView Methods
-    
-    func addPinAnnotationAndCenter() {
-        let deltaValue = 0.5
-        let longitudeDelta = CLLocationDegrees(deltaValue)
-        let latitudeDelta = CLLocationDegrees(deltaValue)
-        let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
-        let region = MKCoordinateRegion(center: pin.coordinate, span: span)
-        mapView.setRegion(region, animated: false)
-        mapView.addAnnotation(pin)
-        mapView.setCenterCoordinate(pin.coordinate, animated: false)
-    }
-    
-    func configureCell(cell: ImageCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
-        let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        if let photoImage = UIImage(contentsOfFile: pic.imagePath!) {
-            cell.imageCollectionViewCellImage.image = photoImage
-        }
+        updateBottomButton()
     }
     
     // MARK: - UICollectionViewDelegate Methods
@@ -149,11 +135,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         if let index = find(selectedIndexes, indexPath) {
             selectedIndexes.removeAtIndex(index)
             cell.imageCollectionViewCellImage.hidden = false
-            cell.backgroundColor = .ocean()
         } else {
             selectedIndexes.append(indexPath)
             cell.imageCollectionViewCellImage.hidden = true
-            cell.backgroundColor = UIColor.redColor()
         }
         
         configureCell(cell, atIndexPath: indexPath)
@@ -203,22 +187,27 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
             }, completion: nil)
     }
     
-    func updateBottomButton() {
-        if selectedIndexes.count == 0 {
-            newCollectionButton.title = "New Collection"
-            
-        } else {
-            newCollectionButton.title = "Remove Selected Photos"
+    // MARK: - MapView Methods
+    
+    func addPinAnnotationAndCenter() {
+        let deltaValue = 0.5
+        let longitudeDelta = CLLocationDegrees(deltaValue)
+        let latitudeDelta = CLLocationDegrees(deltaValue)
+        let span = MKCoordinateSpan(latitudeDelta: latitudeDelta, longitudeDelta: longitudeDelta)
+        let region = MKCoordinateRegion(center: pin.coordinate, span: span)
+        mapView.setRegion(region, animated: false)
+        mapView.addAnnotation(pin)
+        mapView.setCenterCoordinate(pin.coordinate, animated: false)
+    }
+    
+    func configureCell(cell: ImageCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
+        cell.activityIndicator.startAnimating()
+        cell.activityIndicator.hidden = false
+        let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        if let photoImage = UIImage(contentsOfFile: pic.imagePath!) {
+            cell.imageCollectionViewCellImage.image = photoImage
+            cell.activityIndicator.stopAnimating()
+            cell.activityIndicator.hidden = true
         }
     }
 }
-
-// MARK: - Add Ocean UIColor
-extension UIColor {
-    
-    class func ocean() -> UIColor {
-        return UIColor(red:0/255, green:64/255, blue:128/255, alpha:1.0)
-    }
-
-}
-

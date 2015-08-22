@@ -73,7 +73,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         mapView.frame.origin.y += tapPinsNotificationView.frame.height
     }
     
-    // MARK: - Add and Remove Annotations
+    // MARK: - MapView and Pin Annotation Methods
     
     func annotate(gestureRecognizer: UIGestureRecognizer) {
         if self.navigationItem.rightBarButtonItem?.title == "Done" {
@@ -81,10 +81,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         } else if gestureRecognizer.state == UIGestureRecognizerState.Began {
             var touchPoint = gestureRecognizer.locationInView(mapView)
             var newCoordinates = mapView.convertPoint(touchPoint, toCoordinateFromView: mapView)
-            let annotation = Pin(annotationLatitude: newCoordinates.latitude, annotationLongitude: newCoordinates.longitude, context: sharedContext)
-            mapView.addAnnotation(annotation)
+            let pinAnnotation = Pin(annotationLatitude: newCoordinates.latitude, annotationLongitude: newCoordinates.longitude, context: sharedContext)
+            mapView.addAnnotation(pinAnnotation)
+            getPhotosUsingFlickrClient(pinAnnotation)
             CoreDataStackManager.sharedInstance().saveContext()
-            getPhotosUsingFlickrClient(annotation)
         }
     }
     
@@ -93,7 +93,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
             let pin = view.annotation as! Pin
             imageCollectionVC.pin = pin
-            //imageCollectionVC.photos = Array(pin.photos)
             mapView.deselectAnnotation(view.annotation, animated: false)
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
@@ -105,20 +104,44 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     }
     
     func restorePersistedAnnotations() {
-        let fetchRequest = NSFetchRequest(entityName: "Pin")
-        let restoredPins = sharedContext.executeFetchRequest(fetchRequest, error: nil) as! [Pin]
+        let restoredPins = fetchedResultsController.fetchedObjects as! [Pin]
         for pin in restoredPins {
             mapView.addAnnotation(pin)
+            println(pin.photos.count)
         }
     }
-    
-    // MARK: - Animate Annotation Pin Drop
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
         var pin = MKPinAnnotationView()
         pin.annotation = annotation
         pin.animatesDrop = true
         return pin
+    }
+    
+    func getPhotosUsingFlickrClient(pin: Pin) {
+        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
+            if success {
+                CoreDataStackManager.sharedInstance().saveContext()
+            }
+        }
+    }
+    
+    // MARK: - NSFetchedResultsControllerDelegate Methods
+    
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        // TODO: implement
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
+        // TODO: implement
+    }
+    
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        // TODO: implement
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        // TODO: implement
     }
     
     // MARK: - Persist Chosen Map Region
@@ -151,33 +174,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             mapView.setRegion(savedRegion, animated: animated)
             mapView.setCenterCoordinate(center, animated: animated)
         }
-    }
-    
-    func getPhotosUsingFlickrClient(pin: Pin) {
-        FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            if success {
-                CoreDataStackManager.sharedInstance().saveContext()
-            }
-        }
-    }
-    
-    // MARK: - NSFetchedResultsControllerDelegate Methods
-    
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        // TODO: implement
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        // TODO: implement
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        // TODO: implement
-    }
-    
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        println(fetchedResultsController.fetchedObjects!.count)
-        // TODO: implement
     }
     
 }

@@ -28,11 +28,11 @@ class Photo : NSManagedObject {
     var photoImage: UIImage? {
         
         get {
-            return FlickrClient.Caches.imageCache.imageWithIdentifier("\(id).jpg")
+            return FlickrClient.Caches.imageCache.imageWithIdentifier("\(imagePath)")
         }
         
         set {
-            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: "\(id).jpg")
+            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: "\(imagePath)")
         }
     }
     
@@ -45,8 +45,8 @@ class Photo : NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         id = dictionary[Keys.ID] as? String!
         flickrURL = dictionary[Keys.FlickrURL] as? String!
-        //imagePath = saveImageToDocumentsDirectoryFromURL() as String!
-        //println(imagePath!)
+        imagePath = saveImageToDocumentsDirectoryFromURL() as String!
+        println(imagePath!)
     }
     
     func saveImageToDocumentsDirectoryFromURL() -> String {
