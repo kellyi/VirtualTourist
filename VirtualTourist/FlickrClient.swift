@@ -108,8 +108,8 @@ class FlickrClient : NSObject {
     // MARK: - Create Bounding Box for API Call
     
     func createBoundingBoxString(latitude: Double, longitude: Double) -> String {
-        let bounding_box_half_width = 0.3
-        let bounding_box_half_height = 0.3
+        let bounding_box_half_width = 0.2
+        let bounding_box_half_height = 0.2
         let lat_min = -90.0
         let lat_max = 90.0
         let lon_min = -180.0

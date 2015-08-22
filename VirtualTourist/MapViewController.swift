@@ -97,8 +97,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
             let pin = view.annotation as! Pin
-            sharedContext.deleteObject(pin)
             mapView.removeAnnotation(pin)
+            sharedContext.deleteObject(pin)
             CoreDataStackManager.sharedInstance().saveContext()
         }
     }

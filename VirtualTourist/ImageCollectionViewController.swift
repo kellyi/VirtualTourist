@@ -66,6 +66,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
+        imageCollectionView.reloadData()
     }
     
     // MARK: - NewCollectionButton IBAction & Supporting Methods
@@ -204,6 +205,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         cell.activityIndicator.startAnimating()
         cell.activityIndicator.hidden = false
         let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        println(pic.imagePath!)
         if let photoImage = UIImage(contentsOfFile: pic.imagePath!) {
             cell.imageCollectionViewCellImage.image = photoImage
             cell.activityIndicator.stopAnimating()
