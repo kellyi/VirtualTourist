@@ -41,7 +41,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
         restorePersistedAnnotations()
-        println(fetchedResultsController.fetchedObjects!.count)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -94,7 +93,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
             let imageCollectionVC = self.storyboard!.instantiateViewControllerWithIdentifier("imageCollectionVC") as! ImageCollectionViewController
             let pin = view.annotation as! Pin
             imageCollectionVC.pin = pin
-            imageCollectionVC.photos = Array(pin.photos)
+            //imageCollectionVC.photos = Array(pin.photos)
             mapView.deselectAnnotation(view.annotation, animated: false)
             navigationController!.pushViewController(imageCollectionVC, animated: true)
         } else {
@@ -107,7 +106,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func restorePersistedAnnotations() {
         for pin in fetchedResultsController.fetchedObjects as! [Pin] {
-            println(pin.photos)
             mapView.addAnnotation(pin)
         }
     }
@@ -155,7 +153,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func getPhotosUsingFlickrClient(pin: Pin) {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-            CoreDataStackManager.sharedInstance().saveContext()
+            if success {
+                CoreDataStackManager.sharedInstance().saveContext()
+            }
         }
     }
     

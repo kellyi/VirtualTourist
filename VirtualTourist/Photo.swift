@@ -37,7 +37,7 @@ class Photo : NSManagedObject {
         title = dictionary[Keys.Title] as? String!
         flickrURL = dictionary[Keys.FlickrURL] as? String!
         imagePath = saveImageToDocumentsDirectoryFromURL() as String!
-        println(imagePath!)
+        //println(imagePath!)
     }
     
     func saveImageToDocumentsDirectoryFromURL() -> String {
@@ -54,7 +54,7 @@ class Photo : NSManagedObject {
     }
     
     override func prepareForDeletion() {
-        println("deleting \(imagePath)")
+        //println("deleting \(imagePath)")
         deleteFile()
     }
     
