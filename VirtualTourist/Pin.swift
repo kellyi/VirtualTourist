@@ -14,14 +14,19 @@ import MapKit
 
 class Pin : NSManagedObject, MKAnnotation {
     
+    // MARK: - Variables
+    
+    // NSManaged var
     @NSManaged var latitude: NSNumber
     @NSManaged var longitude: NSNumber
     @NSManaged var photos: [Photo]
     
+    // Computed coordinate variable to satisfy making the Pin an MKAnnotation subclass
     var coordinate: CLLocationCoordinate2D {
         return CLLocationCoordinate2D(latitude: latitude.doubleValue, longitude: longitude.doubleValue)
     }
     
+    // MARK: - Initializers
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }

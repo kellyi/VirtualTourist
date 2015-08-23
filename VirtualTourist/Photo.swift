@@ -13,6 +13,7 @@ import CoreData
 
 class Photo : NSManagedObject {
     
+    // MARK: - Convenience Keys for Creating Photo from JSON Dictionary
     struct Keys {
         static let ID = "id"
         static let ImagePath = "image_path"
@@ -20,11 +21,15 @@ class Photo : NSManagedObject {
         static let FlickrURL = "flickrURL"
     }
     
+    // MARK: - Variables
+    
+    // NSManaged var
     @NSManaged var id: String?
     @NSManaged var pin: Pin
     @NSManaged var imagePath: String?
     @NSManaged var flickrURL: String?
     
+    // MARK: - Initializers
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
@@ -38,6 +43,9 @@ class Photo : NSManagedObject {
         saveImageToDocumentsDirectoryFromURL()
     }
     
+    // MARK: - Photo File Methods
+    
+    // Save photo's image to Documents directory
     func saveImageToDocumentsDirectoryFromURL() {
         let photoFileName = "\(id!).png"
         let imageURL = NSURL(string: flickrURL!)
@@ -48,23 +56,23 @@ class Photo : NSManagedObject {
         imageDataPNG.writeToFile(path, atomically: true)
     }
     
+    // Retrieve photo's image from Documents directory
     func retrieveImageFromDocumentsDirectory() -> UIImage? {
         let path = getPathToPhotoFile()
-        let data = NSData(contentsOfFile: path)
-        return UIImage(data: data!)
+        if let data = NSData(contentsOfFile: path) {
+            return UIImage(data: data)
+        }
+        return nil
     }
     
+    // Delete photo's image from Documents directory right before photo object is deleted
     override func prepareForDeletion() {
-        deleteFile()
-    }
-    
-    func deleteFile() {
         let fileManager = NSFileManager.defaultManager()
         let path = getPathToPhotoFile()
-        println("deleting \(imagePath!)")
         fileManager.removeItemAtPath(path, error: nil)
     }
     
+    // Helper method to find full path to file in Documents directory
     func getPathToPhotoFile() -> String {
         let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
         let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(imagePath!)

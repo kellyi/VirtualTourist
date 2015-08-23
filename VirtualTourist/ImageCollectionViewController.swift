@@ -14,19 +14,24 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
 
     // MARK: - Variables
     
+    // Pin object passed from MapViewController segue
     var pin: Pin!
     
+    // NSIndexPath arrays to store selected collectionViewCells to remove
     var selectedIndexes = [NSIndexPath]()
     var insertedIndexPaths: [NSIndexPath]!
     var deletedIndexPaths: [NSIndexPath]!
     var updatedIndexPaths: [NSIndexPath]!
     
+    
+    // IBOutlets
     @IBOutlet weak var mapView: MKMapView!
     
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
     @IBOutlet weak var newCollectionButton: UIBarButtonItem!
     
+    // NSFetchedResultsController
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "Photo")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
@@ -38,25 +43,26 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         return fetchedResultsController
     }()
     
+    // NSManagedObjectContext singleton
     lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
     }()
     
     // MARK: - Setup UIViews
     
+    // Set collectionViewCells to be 1/3 of the width of the screen
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
         let layout : UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         layout.minimumLineSpacing = 0
         layout.minimumInteritemSpacing = 0
-        
         let width = floor(self.imageCollectionView.frame.size.width/3)
         layout.itemSize = CGSize(width: width, height: width)
         imageCollectionView.collectionViewLayout = layout
     }
 
+    // Setup fetchedResultsController & imageCollectionView
     override func viewDidLoad() {
         super.viewDidLoad()
         imageCollectionView.allowsMultipleSelection = true
@@ -64,6 +70,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         fetchedResultsController.delegate = self
     }
     
+    // Place pin with preloaded images on map
+    //
+    // If coordinates from pin location returned no Flickr photos, disable
+    // newCollectionButton and change text to report issue
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
@@ -75,21 +85,35 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     // MARK: - NewCollectionButton IBAction & Supporting Methods
     
+    // Change newCollectionButton action based on whether any cells are selected
+    // for deletion:
+    //
+    // - if no cells are selected, action should grab a new set of pictures from
+    // Flickr, keeping the button disabled until the new pictures have been saved
+    // - if => 1 cells are selected, delete the selected images
     @IBAction func newCollectionButtonPressed(sender: AnyObject) {
         if selectedIndexes.isEmpty {
             deleteAllPhotos()
+            newCollectionButton.enabled = false
+            newCollectionButton.title = "Getting New Photos from Flickr"
             FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.imageCollectionView.reloadData()
-                })
-                CoreDataStackManager.sharedInstance().saveContext()
+                if success {
+                    dispatch_async(dispatch_get_main_queue(), {
+                        CoreDataStackManager.sharedInstance().saveContext()
+                        self.imageCollectionView.reloadData()
+                        self.newCollectionButton.enabled = true
+                        self.newCollectionButton.title = "New Collection"
+                    })
+                }
+                
             }
-            self.imageCollectionView.reloadData()
         } else {
             deleteSelectedPhotos()
         }
+        self.imageCollectionView.reloadData()
     }
     
+    // Change newCollectionButton title text to represent what it'll do
     func updateBottomButton() {
         if selectedIndexes.count > 0 {
             newCollectionButton.title = "Remove Selected Photos"
@@ -98,14 +122,16 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         }
     }
     
+    // Delete all photo objects (and underlying files)
     func deleteAllPhotos() {
         for photo in fetchedResultsController.fetchedObjects as! [Photo] {
-            photo.deleteFile()
             sharedContext.deleteObject(photo)
         }
+        CoreDataStackManager.sharedInstance().saveContext()
         selectedIndexes = [NSIndexPath]()
     }
     
+    // Delete only selected photo objects (and underlying files)
     func deleteSelectedPhotos() {
         var photosToDelete = [Photo]()
         
@@ -114,10 +140,9 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         }
         
         for photo in photosToDelete {
-            photo.deleteFile()
             sharedContext.deleteObject(photo)
         }
-        
+        CoreDataStackManager.sharedInstance().saveContext()
         selectedIndexes = [NSIndexPath]()
         updateBottomButton()
     }
@@ -135,62 +160,28 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         return cell
     }
     
+    // Toggle selecting and deselecting cells to delete, toggling the cell's
+    // background color from .oceanColor() to .orangeColor()
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCollectionViewCell
-        cell.backgroundView?.backgroundColor = .orangeColor()
-        
         if let index = find(selectedIndexes, indexPath) {
             selectedIndexes.removeAtIndex(index)
-            cell.backgroundView?.backgroundColor = UIColor.oceanColor()
+            cell.backgroundColor = UIColor.oceanColor()
         } else {
             selectedIndexes.append(indexPath)
-            cell.backgroundView?.backgroundColor = UIColor.orangeColor()
+            cell.backgroundColor = UIColor.orangeColor()
         }
-        
-        configureCell(cell, atIndexPath: indexPath)
         updateBottomButton()
     }
     
+    // Set image and initial backgroundColor for each cell
+    // Cell starts as .grayColor() as photos load, then to .oceanColor() when done
     func configureCell(cell: ImageCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
-        /*
-        cell.imageCollectionViewCellImage.image = nil
-        let photo = pin.photos[indexPath.row] as Photo
-        if photo.flickrURL == nil || photo.flickrURL == "" {
-            return
-        } else if photo.photoImage != nil {
-            cell.imageCollectionViewCellImage.image = photo.photoImage
-        } else {
-            cell.activityIndicator.startAnimating()
-            cell.activityIndicator.hidden = false
-            /*
-            FlickrClient.sharedInstance().taskForImageWithSize(photo.flickrURL!) { data, error in
-                
-                if let data = data {
-                    photo.photoImage = UIImage(data: data)
-                    dispatch_async(dispatch_get_main_queue()) {
-                        cell.activityIndicator.stopAnimating()
-                        cell.activityIndicator.hidden = true
-                        cell.imageCollectionViewCellImage.image = photo.photoImage
-                        //self.loadedImages++
-                        //if self.loadedImages == self.fetchedResultsController.fetchedObjects?.count {
-                        //    self.newCollectionButton.enabled = true
-                        //}
-                        
-                    }
-                }
-            }
-            */
-        }
-        
-        */
-        cell.activityIndicator.startAnimating()
-        cell.activityIndicator.hidden = false
+        cell.backgroundColor = UIColor.grayColor()
         let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        println(pic.imagePath)
         if let photoImage = pic.retrieveImageFromDocumentsDirectory() {
+            cell.backgroundColor = UIColor.oceanColor()
             cell.imageCollectionViewCellImage.image = photoImage as UIImage!
-            cell.activityIndicator.stopAnimating()
-            cell.activityIndicator.hidden = true
         }
     }
     
@@ -203,7 +194,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        /*
         switch type {
         case .Insert:
             self.imageCollectionView.insertSections(NSIndexSet(index: sectionIndex))
@@ -212,7 +202,6 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         default:
             return
         }
-        */
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
@@ -223,6 +212,8 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         case .Delete:
             deletedIndexPaths.append(indexPath!)
             break
+        case .Update:
+            updatedIndexPaths.append(indexPath!)
         default:
             break
         }
@@ -230,24 +221,21 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func controllerDidChangeContent(controller: NSFetchedResultsController) {
         imageCollectionView.performBatchUpdates({() -> Void in
-            
             for indexPath in self.insertedIndexPaths {
                 self.imageCollectionView.insertItemsAtIndexPaths([indexPath])
             }
-            
             for indexPath in self.deletedIndexPaths {
                 self.imageCollectionView.deleteItemsAtIndexPaths([indexPath])
             }
-            
             for indexPath in self.updatedIndexPaths {
                 self.imageCollectionView.reloadItemsAtIndexPaths([indexPath])
             }
-            
-            }, completion: nil)
+        }, completion: nil)
     }
     
     // MARK: - MapView Methods
     
+    // Set mapView region to show pin & surroundings
     func addPinAnnotationAndCenter() {
         let deltaValue = 0.5
         let longitudeDelta = CLLocationDegrees(deltaValue)

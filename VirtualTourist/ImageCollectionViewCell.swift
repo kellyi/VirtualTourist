@@ -9,12 +9,8 @@
 import UIKit
 
 class ImageCollectionViewCell: UICollectionViewCell {
-
     
+    // IBOutlet to display saved photo
     @IBOutlet weak var imageCollectionViewCellImage: UIImageView!
     
-    @IBOutlet weak var cellBackgroundView: UIView!
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-
 }

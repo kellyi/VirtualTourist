@@ -11,28 +11,35 @@ import CoreData
 
 class FlickrClient : NSObject {
     
-    // replace with your own Flickr API Key
+    // MARK: - Variables
+    
+    // Flickr API Key: currently stored in a .gitignored file
     let flickrAPIKey = FlickrClient.Constants.ApiKey
     
-    // public domain and select Creative Commons licenses
-    let license = "1,2,3,4,5,6,8"
+    // Flickr API call constants
     let flickrURL = "https://api.flickr.com/services/rest/?method=flickr.photos.search"
     let flickrExtraParams = "&safe_search=1&content_type=1&format=json&nojsoncallback=1"
+    let license = "1,2,3,4,5,6,8" // only Public Domain and Creative Commons pics
     let perPage = "21"
     
     var session: NSURLSession
     var completionHandler : ((success: Bool, errorString: String?) -> Void)? = nil
     
+    // NSMangedObjectContext singleton
     lazy var sharedContext: NSManagedObjectContext = {
         return CoreDataStackManager.sharedInstance().managedObjectContext!
     }()
     
+    // MARK: - Initializer
     override init() {
         let config = NSURLSessionConfiguration.defaultSessionConfiguration()
         session = NSURLSession(configuration: config)
         super.init()
     }
     
+    // MARK: - Flickr API Calls
+    
+    // First API call: find number of pages of photos, pick a random page, use that random page to invoke a second method making another Flickr API call
     func getPhotosUsingCompletionHandler(pin: Pin, completionHandler: (success: Bool, errorString: String?) -> Void) {
         let latitude = pin.coordinate.latitude
         let longitude = pin.coordinate.longitude
@@ -60,6 +67,7 @@ class FlickrClient : NSObject {
         task.resume()
     }
     
+    // Second API call: get available photos from specific results page, create a set of photo objects
     func getPhotosWithPageUsingCompletionHandler(pin: Pin, pageNumber: Int, completionHandler: (success: Bool, errorString: String?) -> Void) {
         let latitude = pin.coordinate.latitude
         let longitude = pin.coordinate.longitude
@@ -90,6 +98,9 @@ class FlickrClient : NSObject {
         task.resume()
     }
     
+    // MARK: - Parse Flickr JSON
+    
+    // Create a Photo object from JSON dictionary
     func photoFromDictionary(photoDictionary: NSDictionary) -> Photo? {
         let photoID = photoDictionary["id"] as! String
         let farm = photoDictionary["farm"] as! NSNumber
@@ -123,7 +134,7 @@ class FlickrClient : NSObject {
     
     // MARK: - Shared Instance
     
-    // make this class a singleton to share across classes
+    // Make this class a singleton to share across classes
     class func sharedInstance() -> FlickrClient {
         struct Singleton {
             static var sharedInstance = FlickrClient()
