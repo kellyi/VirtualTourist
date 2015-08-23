@@ -105,10 +105,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     
     func restorePersistedAnnotations() {
         let restoredPins = fetchedResultsController.fetchedObjects as! [Pin]
-        for pin in restoredPins {
-            mapView.addAnnotation(pin)
-            println(pin.photos.count)
-        }
+        for pin in restoredPins { mapView.addAnnotation(pin) }
     }
     
     func mapView(mapView: MKMapView!, viewForAnnotation annotation: MKAnnotation!) -> MKAnnotationView! {
@@ -121,8 +118,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, NSFetchedResultsCo
     func getPhotosUsingFlickrClient(pin: Pin) {
         FlickrClient.sharedInstance().getPhotosUsingCompletionHandler(pin) { (success, errorString) in
             if success {
-                CoreDataStackManager.sharedInstance().saveContext()
+                
             }
+            CoreDataStackManager.sharedInstance().saveContext()
         }
     }
     

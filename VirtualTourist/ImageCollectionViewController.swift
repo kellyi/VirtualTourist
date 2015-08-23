@@ -59,6 +59,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        imageCollectionView.allowsMultipleSelection = true
         fetchedResultsController.performFetch(nil)
         fetchedResultsController.delegate = self
     }
@@ -66,7 +67,10 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         addPinAnnotationAndCenter()
-        imageCollectionView.reloadData()
+        if pin.photos.isEmpty {
+            newCollectionButton.title = "No Flickr Photos for Coordinates"
+            newCollectionButton.enabled = false
+        }
     }
     
     // MARK: - NewCollectionButton IBAction & Supporting Methods
@@ -80,6 +84,7 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
                 })
                 CoreDataStackManager.sharedInstance().saveContext()
             }
+            self.imageCollectionView.reloadData()
         } else {
             deleteSelectedPhotos()
         }
@@ -132,17 +137,61 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         let cell = collectionView.cellForItemAtIndexPath(indexPath) as! ImageCollectionViewCell
+        cell.backgroundView?.backgroundColor = .orangeColor()
         
         if let index = find(selectedIndexes, indexPath) {
             selectedIndexes.removeAtIndex(index)
-            cell.imageCollectionViewCellImage.hidden = false
+            cell.backgroundView?.backgroundColor = UIColor.oceanColor()
         } else {
             selectedIndexes.append(indexPath)
-            cell.imageCollectionViewCellImage.hidden = true
+            cell.backgroundView?.backgroundColor = UIColor.orangeColor()
         }
         
         configureCell(cell, atIndexPath: indexPath)
         updateBottomButton()
+    }
+    
+    func configureCell(cell: ImageCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
+        /*
+        cell.imageCollectionViewCellImage.image = nil
+        let photo = pin.photos[indexPath.row] as Photo
+        if photo.flickrURL == nil || photo.flickrURL == "" {
+            return
+        } else if photo.photoImage != nil {
+            cell.imageCollectionViewCellImage.image = photo.photoImage
+        } else {
+            cell.activityIndicator.startAnimating()
+            cell.activityIndicator.hidden = false
+            /*
+            FlickrClient.sharedInstance().taskForImageWithSize(photo.flickrURL!) { data, error in
+                
+                if let data = data {
+                    photo.photoImage = UIImage(data: data)
+                    dispatch_async(dispatch_get_main_queue()) {
+                        cell.activityIndicator.stopAnimating()
+                        cell.activityIndicator.hidden = true
+                        cell.imageCollectionViewCellImage.image = photo.photoImage
+                        //self.loadedImages++
+                        //if self.loadedImages == self.fetchedResultsController.fetchedObjects?.count {
+                        //    self.newCollectionButton.enabled = true
+                        //}
+                        
+                    }
+                }
+            }
+            */
+        }
+        
+        */
+        cell.activityIndicator.startAnimating()
+        cell.activityIndicator.hidden = false
+        let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
+        println(pic.imagePath)
+        if let photoImage = pic.retrieveImageFromDocumentsDirectory() {
+            cell.imageCollectionViewCellImage.image = photoImage as UIImage!
+            cell.activityIndicator.stopAnimating()
+            cell.activityIndicator.hidden = true
+        }
     }
     
     // MARK: - NSFetchedResultsControllerDelegate Methods
@@ -154,7 +203,16 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
     }
     
     func controller(controller: NSFetchedResultsController, didChangeSection sectionInfo: NSFetchedResultsSectionInfo, atIndex sectionIndex: Int, forChangeType type: NSFetchedResultsChangeType) {
-        // TODO: implement
+        /*
+        switch type {
+        case .Insert:
+            self.imageCollectionView.insertSections(NSIndexSet(index: sectionIndex))
+        case .Delete:
+            self.imageCollectionView.deleteSections(NSIndexSet(index: sectionIndex))
+        default:
+            return
+        }
+        */
     }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
@@ -200,16 +258,15 @@ class ImageCollectionViewController: UIViewController, MKMapViewDelegate, UIColl
         mapView.addAnnotation(pin)
         mapView.setCenterCoordinate(pin.coordinate, animated: false)
     }
-    
-    func configureCell(cell: ImageCollectionViewCell, atIndexPath indexPath: NSIndexPath) {
-        cell.activityIndicator.startAnimating()
-        cell.activityIndicator.hidden = false
-        let pic = fetchedResultsController.objectAtIndexPath(indexPath) as! Photo
-        println(pic.imagePath!)
-        if let photoImage = UIImage(contentsOfFile: pic.imagePath!) {
-            cell.imageCollectionViewCellImage.image = photoImage
-            cell.activityIndicator.stopAnimating()
-            cell.activityIndicator.hidden = true
-        }
-    }
+
 }
+
+// MARK: - Add Ocean UIColor
+extension UIColor {
+    
+    class func oceanColor() -> UIColor {
+        return UIColor(red:0/255, green:64/255, blue:128/255, alpha:1.0)
+    }
+
+}
+

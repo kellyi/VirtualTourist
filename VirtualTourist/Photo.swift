@@ -21,20 +21,9 @@ class Photo : NSManagedObject {
     }
     
     @NSManaged var id: String?
-    @NSManaged var pin: Pin?
+    @NSManaged var pin: Pin
     @NSManaged var imagePath: String?
     @NSManaged var flickrURL: String?
-    
-    var photoImage: UIImage? {
-        
-        get {
-            return FlickrClient.Caches.imageCache.imageWithIdentifier("\(imagePath)")
-        }
-        
-        set {
-            FlickrClient.Caches.imageCache.storeImage(newValue, withIdentifier: "\(imagePath)")
-        }
-    }
     
     override init(entity: NSEntityDescription, insertIntoManagedObjectContext context: NSManagedObjectContext?) {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
@@ -45,21 +34,24 @@ class Photo : NSManagedObject {
         super.init(entity: entity, insertIntoManagedObjectContext: context)
         id = dictionary[Keys.ID] as? String!
         flickrURL = dictionary[Keys.FlickrURL] as? String!
-        imagePath = saveImageToDocumentsDirectoryFromURL() as String!
-        println(imagePath!)
+        imagePath = "\(id!).png"
+        saveImageToDocumentsDirectoryFromURL()
     }
     
-    func saveImageToDocumentsDirectoryFromURL() -> String {
-        let fileManager = NSFileManager.defaultManager()
-        let directoryPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
+    func saveImageToDocumentsDirectoryFromURL() {
         let photoFileName = "\(id!).png"
-        let filePathToWrite = "\(directoryPath)/\(photoFileName)"
         let imageURL = NSURL(string: flickrURL!)
         let imageData = NSData(contentsOfURL: imageURL!)
         let image = UIImage(data: imageData!)
         let imageDataPNG = UIImagePNGRepresentation(image)
-        fileManager.createFileAtPath(filePathToWrite, contents: imageDataPNG, attributes: nil)
-        return filePathToWrite
+        let path = getPathToPhotoFile()
+        imageDataPNG.writeToFile(path, atomically: true)
+    }
+    
+    func retrieveImageFromDocumentsDirectory() -> UIImage? {
+        let path = getPathToPhotoFile()
+        let data = NSData(contentsOfFile: path)
+        return UIImage(data: data!)
     }
     
     override func prepareForDeletion() {
@@ -68,7 +60,14 @@ class Photo : NSManagedObject {
     
     func deleteFile() {
         let fileManager = NSFileManager.defaultManager()
-        let filePathToDelete = imagePath!
-        fileManager.removeItemAtPath(filePathToDelete, error: nil)
+        let path = getPathToPhotoFile()
+        println("deleting \(imagePath!)")
+        fileManager.removeItemAtPath(path, error: nil)
+    }
+    
+    func getPathToPhotoFile() -> String {
+        let documentsDirectoryURL: NSURL = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask).first as! NSURL
+        let fullURL = documentsDirectoryURL.URLByAppendingPathComponent(imagePath!)
+        return fullURL.path!
     }
 }
