@@ -13,4 +13,4 @@ Here are some screenshots:
 
 ![mapview_screen](https://github.com/kellyi/VirtualTourist/blob/master/mapview_screen.png)
 
-![imagecollection_screen](https://github.com/kellyi/VirtualTourist/blog/master/imagecollection_screen.png)
+![imagecollection_screen](https://github.com/kellyi/VirtualTourist/blob/master/imagecollection_screen.png)
