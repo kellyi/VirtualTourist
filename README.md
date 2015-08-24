@@ -8,3 +8,9 @@ Using the app, you drop a pin on the map and retrieve a set of Public Domain and
 The app uses the Flickr API to find and retrieve photos for latitude and longitude coordinates (selected when the user drops a pin on a map) and Core Data & NSFetchedResultsController to persist and show Pin and Photo objects. The image for each Photo object is saved as a .png file in the app's Documents directory, and the files are automatically deleted when the associated Photo object is deleted.
 
 To run VirtualTourist on a simulator or on a device, you'll need to register for a Flickr API key and use that key for the `flickrAPIkey` variable in the `FlickrClient.swift` file.
+
+Here are some screenshots:
+
+![mapview_screen](https://github.com/kellyi/VirtualTourist/blob/master/mapview_screen.png)
+
+![imagecollection_screen](https://github.com/kellyi/VirtualTourist/blog/master/imagecollection_screen.png)
